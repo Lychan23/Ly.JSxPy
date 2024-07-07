@@ -1,0 +1,9 @@
+.next
+.venv
+backup
+discord.log
+.env
+node_modules
+dist
+.vscode
+projects

@@ -1,0 +1,101 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 33, 37, 41; /* Dark gray */
+  --background-start-rgb: 238, 238, 238; /* Light gray */
+  --background-end-rgb: 255, 255, 255; /* White */
+  --panel-background-rgb: 255, 255, 255; /* White */
+  --panel-text-rgb: 33, 37, 41; /* Dark gray */
+  --input-background-rgb: 245, 245, 245; /* Very light gray */
+  --input-text-rgb: 33, 37, 41; /* Dark gray */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 200, 200, 200; /* Light gray */
+    --background-start-rgb: 28, 28, 28; /* Dark gray */
+    --background-end-rgb: 0, 0, 0; /* Almost black */
+    --panel-background-rgb: 44, 44, 44; /* Darker gray */
+    --panel-text-rgb: 200, 200, 200; /* Light gray */
+    --input-background-rgb: 51, 51, 51; /* Darker gray */
+    --input-text-rgb: 200, 200, 200; /* Light gray */
+  }
+}
+
+.btn {
+  @apply py-2 px-4 bg-gray-900 text-white rounded hover:bg-gray-700 transition duration-300;
+}
+
+.section {
+  @apply py-20;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+}
+
+body.dark {
+  --foreground-rgb: 200, 200, 200;
+  --background-start-rgb: 28, 28, 28;
+  --background-end-rgb: 0, 0, 0;
+  --panel-background-rgb: 44, 44, 44;
+  --panel-text-rgb: 200, 200, 200;
+  --input-background-rgb: 51, 51, 51;
+  --input-text-rgb: 200, 200, 200;
+}
+
+body.light {
+  --foreground-rgb: 33, 37, 41;
+  --background-start-rgb: 238, 238, 238;
+  --background-end-rgb: 255, 255, 255;
+  --panel-background-rgb: 255, 255, 255;
+  --panel-text-rgb: 33, 37, 41;
+  --input-background-rgb: 245, 245, 245;
+  --input-text-rgb: 33, 37, 41;
+}
+
+body.dark {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+}
+
+body.light {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+}
+
+.control-panel {
+  background-color: rgb(var(--panel-background-rgb));
+  color: rgb(var(--panel-text-rgb));
+}
+
+input,
+textarea {
+  background-color: rgb(var(--input-background-rgb));
+  color: rgb(var(--input-text-rgb));
+  border: 1px solid rgb(var(--input-background-rgb));
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
