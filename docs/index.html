@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ly.JSxPy Documentation</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #1a202c; /* Dark theme background */
+            color: #a0aec0; /* Light text color */
+            font-family: 'Roboto', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh; /* Full viewport height */
+            margin: 0;
+            overflow-y: auto; /* Enable vertical scrolling */
+        }
+        .animate-fade {
+            animation: fadeIn 2s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .animate-bounce {
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-30px);
+            }
+            60% {
+                transform: translateY(-15px);
+            }
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 20px;
+            font-size: 16px;
+            font-weight: 700;
+            color: white;
+            background-color: #2d3748; /* Darker background */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: #4a5568; /* Lighter background on hover */
+        }
+        .panel {
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #2d3748;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            max-width: 600px; /* Limit panel width */
+            width: 100%; /* Ensure panel takes full width */
+        }
+        nav {
+            margin-bottom: 20px;
+        }
+        nav a {
+            margin-right: 15px;
+            color: #a0aec0;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        main {
+            flex: 1; /* Take remaining vertical space */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start; /* Align content at the top */
+            padding: 20px; /* Add padding for spacing */
+        }
+    </style>
+</head>
+<body>
+    <header class="mb-12">
+        <h1 class="text-4xl font-bold text-white animate-fade">Ly.JSxPy</h1>
+        <p class="text-lg animate-fade">Py-configuration instead of JavaScript</p>
+        <nav>
+            <a href="#intro">Introduction</a>
+            <a href="#features">Features</a>
+            <a href="#advantages">Advantages</a>
+            <a href="#funding">Funding</a>
+            <a href="#repository">Repository</a>
+        </nav>
+    </header>
+    <main>
+        <section id="intro" class="animate-fade">
+            <div class="panel">
+                <h2 class="text-2xl font-semibold text-white">Introduction</h2>
+                <p>Ly.JSxPy is a powerful tool that allows developers to use Python for configuration instead of JavaScript. This can greatly enhance readability, maintainability, and overall development efficiency. The library seamlessly integrates with existing JavaScript projects, providing extensive customization options and reducing the complexity of managing configurations.</p>
+            </div>
+        </section>
+        <section id="features" class="animate-fade">
+            <div class="panel">
+                <h2 class="text-2xl font-semibold text-white">Features</h2>
+                <ul class="list-disc list-inside space-y-2">
+                    <li>Configuration with Python instead of JavaScript</li>
+                    <li>Seamless integration with existing JavaScript projects</li>
+                    <li>Enhanced readability and maintainability</li>
+                    <li>Extensive customization options</li>
+                    <li>Lightweight and fast</li>
+                    <li>Easy to integrate</li>
+                    <li>Comprehensive documentation</li>
+                    <li>Active community support</li>
+                </ul>
+            </div>
+        </section>
+        <section id="advantages" class="animate-bounce">
+            <div class="panel">
+                <h2 class="text-2xl font-semibold text-white">Advantages</h2>
+                <ul class="list-disc list-inside space-y-2">
+                    <li>Leverage Python's simplicity and power</li>
+                    <li>Reduce complexity in managing configurations</li>
+                    <li>Improved developer productivity</li>
+                    <li>Support for modern development workflows</li>
+                    <li>Robust and user-friendly</li>
+                    <li>Perfect for both beginners and experienced developers</li>
+                </ul>
+            </div>
+        </section>
+        <section id="funding" class="animate-fade">
+            <div class="panel">
+                <h2 class="text-2xl font-semibold text-white">Funding</h2>
+                <p>If you find this project useful and want to support its development, please consider making a donation. Your support is greatly appreciated and helps keep the project alive and growing.</p>
+                <p>Support the project: <a href="https://saweria.co/Lychan23" class="text-blue-400 hover:underline">saweria.co/Lychan23</a></p>
+            </div>
+        </section>
+        <section id="repository" class="animate-fade">
+            <div class="panel">
+                <h2 class="text-2xl font-semibold text-white">Repository</h2>
+                <p>You can view the source code and contribute to the project on GitHub. Your contributions and feedback are welcome and help improve the project.</p>
+                <p>Source code: <a href="https://github.com/Lychan23/Ly.JSxPy" class="text-blue-400 hover:underline">github.com/Lychan23/Ly.JSxPy</a></p>
+                <div class="text-center">
+                    <a href="https://github.com/Lychan23/Ly.JSxPy" class="btn">View Repository</a>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
