@@ -32,7 +32,6 @@ const LoginPage = () => {
     setLoading(false);
 
     if (data.success) {
-      document.cookie = `auth-token=${data.token}; path=/`;
       router.push('/control-panel');
     } else {
       setError('Invalid credentials');

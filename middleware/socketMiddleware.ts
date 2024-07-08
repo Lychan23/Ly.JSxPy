@@ -1,4 +1,5 @@
-import { NextApiRequest, NextApiResponse, NextApiHandler } from 'next';
+// middleware/socketMiddleware.ts
+import { NextApiRequest, NextApiResponse } from 'next';
 import { Server as HttpServer } from 'http';
 import { Server } from 'socket.io';
 
