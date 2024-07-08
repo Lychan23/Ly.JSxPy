@@ -9,7 +9,8 @@
     "start": "next start",
     "svr": "node server.js",
     "dev": "next dev",
-    "lint": "next lint"
+    "lint": "next lint",
+    "start-uvicorn": "uvicorn backend.main:app --reload"
   },
   "keywords": [],
   "author": "",

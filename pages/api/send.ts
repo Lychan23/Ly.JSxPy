@@ -3,7 +3,7 @@ import axios from "axios";
 import { Server as SocketIOServer } from "socket.io";
 
 interface ExtendedNextApiRequest extends NextApiRequest {
-  io: SocketIOServer;
+  io?: SocketIOServer;
 }
 
 export default async function handler(req: ExtendedNextApiRequest, res: NextApiResponse) {
@@ -13,7 +13,13 @@ export default async function handler(req: ExtendedNextApiRequest, res: NextApiR
 
     try {
       await axios.post(apiUrl, { text: message });
-      req.io.emit("activity", "Text sent to Discord");
+
+      if (req.io) {
+        req.io.emit("activity", "Text sent to Discord");
+      } else {
+        console.warn("Socket.IO server not initialized");
+      }
+
       res.send("Message sent to Discord");
     } catch (error: unknown) {
       if (error instanceof Error) {

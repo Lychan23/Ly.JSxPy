@@ -2,7 +2,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const directoriesToBackup = ['database', 'public', 'app', "dist", "cogs", "middleware", "styles", "ui"];
+const directoriesToBackup = ['database', 'public', 'app', "dist", "cogs", "middleware", "styles", "ui", 'pages'];
 const fileToBackup = 'server.js';
 const backupDir = path.join(__dirname, 'backup');
 

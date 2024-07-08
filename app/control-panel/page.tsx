@@ -1,6 +1,7 @@
-"use client";
+'use client';
 import { useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
+import Link from 'next/link';
 
 interface Stats {
   cpu: string;
@@ -13,6 +14,7 @@ interface Stats {
 
 const ControlPanel = () => {
   const [log, setLog] = useState<string[]>([]);
+  const [uvicornLog, setUvicornLog] = useState<string[]>([]);
   const [stats, setStats] = useState<Partial<Stats>>({});
   const [theme, setTheme] = useState("dark");
   const [users, setUsers] = useState<string[]>([]);
@@ -27,6 +29,8 @@ const ControlPanel = () => {
     socket.on("activity", (data: string) => setLog((prev) => [...prev, data]));
     socket.on("userList", (users: string[]) => setUsers(users));
     socket.on("message", (data: string) => setLog((prev) => [...prev, data])); // Add listener for 'message' event
+    socket.on("uvicornLog", (data: string) => setUvicornLog((prev) => [...prev, data])); // Add listener for 'uvicornLog' event
+
     fetchTheme();
     fetchStats(); // Fetch stats immediately when the component mounts
 
@@ -36,6 +40,7 @@ const ControlPanel = () => {
       socket.off("activity");
       socket.off("userList");
       socket.off("message");
+      socket.off("uvicornLog");
     };
   }, []);
 
@@ -157,32 +162,67 @@ const ControlPanel = () => {
     }
   };
 
+  const startPanel1 = async () => {
+    try {
+      const res = await fetch("/api/start-panel1", { method: "POST" });
+      if (!res.ok) {
+        throw new Error(await res.text());
+      }
+      setUvicornLog((prev) => [...prev, "Panel 1 started"]);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setError(`Failed to start Panel 1: ${error.message}`);
+      } else {
+        setError("Failed to start Panel 1");
+      }
+    }
+  };
+
   return (
-    <div className={`min-h-screen flex flex-col items-center justify-center ${theme}`}>
-      <div className={`p-8 rounded shadow-md w-full max-w-2xl control-panel`}>
+    <div className={`min-h-screen flex`}>
+      <div className="flex flex-col p-4 bg-gray-800 text-white w-64">
+        <h2 className="text-xl font-semibold mb-4">Control Panel</h2>
+        <button
+          onClick={startBot}
+          className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 mb-2"
+        >
+          Start Bot
+        </button>
+        <button
+          onClick={stopBot}
+          className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 mb-2"
+        >
+          Stop Bot
+        </button>
+        <button
+          onClick={startServer}
+          className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 mb-2"
+        >
+          Start Server
+        </button>
+        <Link href="/command_builder" legacyBehavior>
+          <a className="bg-green-500 text-white p-2 rounded hover:bg-green-600 mb-2">
+            Go to Command Builder
+          </a>
+        </Link>
+        <h2 className="text-xl font-semibold mb-4">Panels Control</h2>
+        <button
+          onClick={startPanel1}
+          className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 mb-2"
+        >
+          Start Panel 1
+        </button>
+        <button
+          onClick={toggleTheme}
+          className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+        >
+          Toggle Theme
+        </button>
+      </div>
+      <div className={`flex-grow p-8 rounded shadow-md w-full max-w-2xl control-panel ${theme}`}>
         <h1 className="text-2xl font-bold mb-4 text-center">Bot Control Panel</h1>
         {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
         <div className="mb-4 flex space-x-2 justify-center">
-          <button
-            onClick={startBot}
-            className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
-          >
-            Start Bot
-          </button>
-          <button
-            onClick={stopBot}
-            className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
-          >
-            Stop Bot
-          </button>
-          <button
-            onClick={startServer}
-            className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
-          >
-            Start Server
-          </button>
-        </div>
-        <div className="mb-4">
           <input
             type="text"
             id="discordMessage"
@@ -225,12 +265,14 @@ const ControlPanel = () => {
             ))}
           </div>
         </div>
-        <button
-          onClick={toggleTheme}
-          className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
-        >
-          Toggle Theme
-        </button>
+      </div>
+      <div className="flex flex-col p-4 bg-gray-800 text-white w-64">
+        <h2 className="text-xl font-semibold mb-4">Uvicorn Log</h2>
+        <div className="bg-gray-100 p-4 rounded h-96 overflow-y-auto dark:bg-gray-800 dark:text-gray-200">
+          {uvicornLog.map((entry, index) => (
+            <div key={index} className="text-sm">{entry}</div>
+          ))}
+        </div>
       </div>
     </div>
   );
