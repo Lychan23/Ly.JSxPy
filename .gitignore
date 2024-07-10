@@ -3,8 +3,12 @@
 backup
 discord.log
 .env
-node_modules
 dist
 .vscode
 projects
 .vercel
+database/database.sqlite
+database/database.db
+changenodeenv.js
+node_modules
+dawg

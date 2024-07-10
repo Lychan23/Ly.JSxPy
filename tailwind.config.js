@@ -1,6 +1,5 @@
-import type { Config } from 'tailwindcss';
-
-const config: Config = {
+/** @type {import('tailwindcss').Config} */
+module.exports = {
   content: [
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
@@ -9,9 +8,9 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        foreground: 'rgb(var(--foreground-rgb))', 
-        backgroundStart: 'rgb(var(--background-start-rgb))', 
-        backgroundEnd: 'rgb(var(--background-end-rgb))', 
+        foreground: 'rgb(var(--foreground-rgb))',
+        backgroundStart: 'rgb(var(--background-start-rgb))',
+        backgroundEnd: 'rgb(var(--background-end-rgb))',
       },
       keyframes: {
         fadeIn: {
@@ -36,5 +35,3 @@ const config: Config = {
   },
   plugins: [],
 };
-
-export default config;

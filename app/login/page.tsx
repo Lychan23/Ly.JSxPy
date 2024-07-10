@@ -1,85 +1,62 @@
+// app/login/page.tsx
 "use client";
-import { useRouter } from 'next/navigation';
-import { useState, useEffect } from 'react';
 
-const LoginPage = () => {
-  const router = useRouter();
+import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '../context/authContext';
+
+const LoginPage: React.FC = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [remember, setRemember] = useState(true);
+  const authContext = useAuth();
+  const router = useRouter();
 
-  useEffect(() => {
-    setUsername('');
-    setPassword('');
-    setError('');
-  }, []);
-
-  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
-    
-    const res = await fetch('/api/auth', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ username, password }),
-    });
-
-    const data = await res.json();
-    setLoading(false);
-
-    if (data.success) {
-      router.push('/control-panel');
-    } else {
-      setError('Invalid credentials');
+  const handleLogin = async () => {
+    if (authContext) {
+      try {
+        await authContext.login(username, password, remember);
+        router.push('/dashboard');
+      } catch (error: any) {
+        console.error('Login failed:', error.message);
+      }
     }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-blue-500 to-purple-600">
-      <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
-        <h1 className="text-2xl font-bold mb-4 text-center">Login</h1>
-        <form onSubmit={handleLogin}>
-          <div className="mb-4">
-            <label htmlFor="username" className="block text-sm font-medium text-gray-700">
-              Username
-            </label>
-            <input
-              id="username"
-              type="text"
-              placeholder="Username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              className="mt-1 p-2 border border-gray-300 rounded w-full text-black"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-              Password
-            </label>
-            <input
-              id="password"
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="mt-1 p-2 border border-gray-300 rounded w-full text-black"
-              required
-            />
-          </div>
-          {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
-          <button
-            type="submit"
-            className={`w-full bg-blue-500 text-white p-2 rounded ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-600'}`}
-            disabled={loading}
-          >
-            {loading ? 'Logging in...' : 'Login'}
-          </button>
-        </form>
+    <div className="min-h-screen flex items-center justify-center bg-black">
+      <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md">
+        <h1 className="text-2xl font-bold text-white mb-6">Login</h1>
+        <input
+          type="text"
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          className="w-full p-2 mb-4 border border-gray-700 rounded bg-gray-700 text-white placeholder-gray-400"
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className="w-full p-2 mb-4 border border-gray-700 rounded bg-gray-700 text-white placeholder-gray-400"
+        />
+        <label className="flex items-center mb-4 text-white">
+          <input
+            type="checkbox"
+            checked={remember}
+            onChange={(e) => setRemember(e.target.checked)}
+            className="mr-2"
+          />
+          Remember me
+        </label>
+        {authContext?.error && <p className="text-red-500 mb-4">{authContext.error}</p>}
+        <button
+          onClick={handleLogin}
+          className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        >
+          Login
+        </button>
       </div>
     </div>
   );

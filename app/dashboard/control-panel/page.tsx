@@ -1,7 +1,10 @@
+// app/dashboard/control-panel/page.tsx
 'use client';
+
 import { useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
 import Link from 'next/link';
+import chalk from 'chalk';
 
 interface Stats {
   cpu: string;
@@ -11,6 +14,21 @@ interface Stats {
   uptime: string;
   currentTasks: string;
 }
+
+const applyColorCoding = (message: string, type: string): string => {
+  switch (type) {
+    case 'INFO':
+      return chalk.blue(message);
+    case 'WARNING':
+      return chalk.yellow(message);
+    case 'ERROR':
+      return chalk.red(message);
+    case 'CRITICAL':
+      return chalk.bgRed.white(message);
+    default:
+      return message;
+  }
+};
 
 const ControlPanel = () => {
   const [log, setLog] = useState<string[]>([]);
@@ -24,15 +42,20 @@ const ControlPanel = () => {
   useEffect(() => {
     const socket: Socket = io();
 
-    socket.on("log", (data: string) => setLog((prev) => [...prev, data]));
+    const handleLog = (data: string, type: string = 'INFO') => {
+      const coloredLog = applyColorCoding(data, type);
+      setLog((prev) => [...prev, coloredLog]);
+    };
+
+    socket.on("log", (data: string) => handleLog(data));
     socket.on("stats", (data: Stats) => setStats(data));
-    socket.on("activity", (data: string) => setLog((prev) => [...prev, data]));
+    socket.on("activity", (data: string) => handleLog(data, 'INFO'));
     socket.on("userList", (users: string[]) => setUsers(users));
-    socket.on("message", (data: string) => setLog((prev) => [...prev, data])); // Add listener for 'message' event
-    socket.on("uvicornLog", (data: string) => setUvicornLog((prev) => [...prev, data])); // Add listener for 'uvicornLog' event
+    socket.on("message", (data: string) => handleLog(data, 'INFO'));
+    socket.on("uvicornLog", (data: string) => setUvicornLog((prev) => [...prev, data]));
 
     fetchTheme();
-    fetchStats(); // Fetch stats immediately when the component mounts
+    fetchStats();
 
     return () => {
       socket.off("log");
@@ -90,7 +113,7 @@ const ControlPanel = () => {
       if (!res.ok) {
         throw new Error(await res.text());
       }
-      setLog((prev) => [...prev, "Bot started"]);
+      setLog((prev) => [...prev, applyColorCoding("Bot started", 'INFO')]);
     } catch (error: unknown) {
       if (error instanceof Error) {
         setError(`Failed to start bot: ${error.message}`);
@@ -120,7 +143,7 @@ const ControlPanel = () => {
   const stopBot = async () => {
     try {
       await fetch("/api/stop", { method: "POST" });
-      setLog((prev) => [...prev, "Bot stopped"]);
+      setLog((prev) => [...prev, applyColorCoding("Bot stopped", 'INFO')]);
     } catch (error: unknown) {
       if (error instanceof Error) {
         setError(`Failed to stop bot: ${error.message}`);
@@ -133,7 +156,7 @@ const ControlPanel = () => {
   const startServer = async () => {
     try {
       await fetch("/api/start-server", { method: "POST" });
-      setLog((prev) => [...prev, "Server started"]);
+      setLog((prev) => [...prev, applyColorCoding("Server started", 'INFO')]);
     } catch (error: unknown) {
       if (error instanceof Error) {
         setError(`Failed to start server: ${error.message}`);
@@ -168,7 +191,7 @@ const ControlPanel = () => {
       if (!res.ok) {
         throw new Error(await res.text());
       }
-      setUvicornLog((prev) => [...prev, "Panel 1 started"]);
+      setUvicornLog((prev) => [...prev, applyColorCoding("Panel 1 started", 'INFO')]);
     } catch (error: unknown) {
       if (error instanceof Error) {
         setError(`Failed to start Panel 1: ${error.message}`);
