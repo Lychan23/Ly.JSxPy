@@ -111,11 +111,3 @@ textarea {
     text-wrap: balance;
   }
 }
-
-/* Add Orbitron font to Tailwind CSS configuration */
-@layer base {
-  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap');
-  .font-orbitron {
-    font-family: 'Orbitron', sans-serif;
-  }
-}

@@ -1,6 +1,5 @@
-// app/layout.tsx
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Orbitron } from "next/font/google";
 import "../styles/globals.css";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from '@vercel/analytics/react';
@@ -8,7 +7,8 @@ import Navbar from "@/app/components/Navbar";
 import CookieConsent from "@/app/components/CookieConsent";
 import { AuthProvider } from "@/app/context/authContext";
 
-const inter = Inter({ subsets: ["latin"] });
+// Import Orbitron font from Google Fonts
+const orbitron = Orbitron({ subsets: ["latin"], weight: ["400", "500", "700"] });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -22,7 +22,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={orbitron.className}>
         <AuthProvider>
           <Navbar />
           <main className="pt-20">
