@@ -7,7 +7,6 @@ dist
 .vscode
 projects
 .vercel
-database/database.sqlite
 database/database.db
 changenodeenv.js
 node_modules
