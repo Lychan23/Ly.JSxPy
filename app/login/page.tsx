@@ -16,7 +16,6 @@ const LoginPage: React.FC = () => {
     if (authContext) {
       try {
         await authContext.login(username, password, remember);
-        router.push('/dashboard');
       } catch (error: any) {
         console.error('Login failed:', error.message);
       }

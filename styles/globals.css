@@ -1,7 +1,19 @@
+/* Import Orbitron font from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap');
+
+/* Tailwind base styles */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* Apply Orbitron font globally */
+@layer base {
+  body {
+    @apply font-orbitron;
+  }
+}
+
+/* Root variables for colors */
 :root {
   --foreground-rgb: 33, 37, 41; /* Dark gray */
   --background-start-rgb: 238, 238, 238; /* Light gray */
@@ -97,5 +109,13 @@ textarea {
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+}
+
+/* Add Orbitron font to Tailwind CSS configuration */
+@layer base {
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap');
+  .font-orbitron {
+    font-family: 'Orbitron', sans-serif;
   }
 }

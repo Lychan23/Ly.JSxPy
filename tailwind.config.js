@@ -31,6 +31,9 @@ module.exports = {
         slideDown: 'slideDown 1s ease-in-out',
         slideUp: 'slideUp 1s ease-in-out',
       },
+      fontFamily: {
+        orbitron: ['Orbitron', 'sans-serif'],  // Add this line
+      },
     },
   },
   plugins: [],

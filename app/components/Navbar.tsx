@@ -18,7 +18,10 @@ export default function Navbar() {
           {authContext?.loggedIn ? (
             <span className="btn">{authContext.username}</span>
           ) : (
-            <Link href="/login" className="btn">Login</Link>
+            <>
+              <Link href="/login" className="btn">Login</Link>
+              <Link href="/register" className="btn">Register</Link>
+            </>
           )}
         </nav>
       </div>
