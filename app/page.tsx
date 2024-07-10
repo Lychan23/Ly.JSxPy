@@ -1,7 +1,10 @@
+// app/page.tsx
 "use client";
-import Navbar from "@/app/components/Navbar";
-import Section from "@/app/components/Section";
-import CookieConsent from "@/app/components/CookieConsent";
+import dynamic from 'next/dynamic';
+
+const Navbar = dynamic(() => import('@/app/components/Navbar'));
+const Section = dynamic(() => import('@/app/components/Section'));
+const CookieConsent = dynamic(() => import('@/app/components/CookieConsent'));
 
 export default function Home() {
   return (

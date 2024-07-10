@@ -3,11 +3,13 @@ import { readFileSync } from 'fs';
 import sqlite3 from 'sqlite3';
 import { open, Database } from 'sqlite';
 
+let db: Database;
+
 const initializeDb = async (): Promise<Database> => {
   const dbFilePath = 'C:/Users/62878/Desktop/Ly.JSxPY/database/database.sqlite';
   const schemaPath = 'C:/Users/62878/Desktop/Ly.JSxPY/database/schema.sql';
 
-  const db = await open({
+  db = await open({
     filename: dbFilePath,
     driver: sqlite3.Database
   });
@@ -17,6 +19,17 @@ const initializeDb = async (): Promise<Database> => {
   console.log('Database schema created/verified.');
 
   return db;
+};
+
+export const sampleQuery = async (userInput: string) => {
+  try {
+    const statement = await db.prepare('SELECT * FROM users WHERE id = ?');
+    const result = await statement.get(userInput);
+    await statement.finalize();
+    return result;
+  } catch (error) {
+    console.error('SQL error:', error);
+  }
 };
 
 export default initializeDb;
