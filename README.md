@@ -62,4 +62,4 @@ This project is licensed under the Apache 2.0
 
 <h2>💖Like my work?</h2>
 
-Sponsor This Project!<p>saweria.co/Lychan23</p>
+Sponsor This Project!<p>https://saweria.co/Lychan23</p>
