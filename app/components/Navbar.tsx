@@ -5,6 +5,7 @@ import { useAuth } from '../context/authContext';
 
 export default function Navbar() {
   const authContext = useAuth();
+  const isVercel = process.env.NEXT_PUBLIC_IS_VERCEL === 'true';
 
   return (
     <header className="bg-gray-900 text-white fixed w-full top-0 left-0 z-10 shadow-md">
@@ -15,12 +16,18 @@ export default function Navbar() {
           <Link href="#features" className="btn">Features</Link>
           <Link href="#about" className="btn">About</Link>
           <Link href="#contact" className="btn">Contact</Link>
-          {authContext?.loggedIn ? (
-            <span className="btn">{authContext.username}</span>
+          {isVercel ? (
+            <Link href="/download" className="btn">Download</Link>
           ) : (
             <>
-              <Link href="/login" className="btn">Login</Link>
-              <Link href="/register" className="btn">Register</Link>
+              {authContext?.loggedIn ? (
+                <span className="btn">{authContext.username}</span>
+              ) : (
+                <>
+                  <Link href="/login" className="btn">Login</Link>
+                  <Link href="/register" className="btn">Register</Link>
+                </>
+              )}
             </>
           )}
         </nav>
