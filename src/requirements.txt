@@ -1,0 +1,12 @@
+aiohttp
+aiosqlite
+python-dotenv
+discord.py
+pygame
+pyttsx3
+pyautogui
+numpy
+imageio
+pynput
+pillow
+flask

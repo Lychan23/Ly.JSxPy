@@ -25,14 +25,19 @@ module.exports = {
           '0%': { transform: 'translateY(100%)' },
           '100%': { transform: 'translateY(0)' },
         },
+        neon: {
+          '0%, 100%': { 'background-position': '0% 50%' },
+          '50%': { 'background-position': '100% 50%' },
+        },
       },
       animation: {
         fadeIn: 'fadeIn 1.5s ease-in-out',
         slideDown: 'slideDown 1s ease-in-out',
         slideUp: 'slideUp 1s ease-in-out',
+        neon: 'neon 5s infinite alternate-reverse',
       },
       fontFamily: {
-        orbitron: ['Orbitron', 'sans-serif'],  // Add this line
+        orbitron: ['Orbitron', 'sans-serif'],
       },
     },
   },

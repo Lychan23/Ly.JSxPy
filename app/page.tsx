@@ -15,7 +15,7 @@ export default function Home() {
           <p>
             Ly.JS is a clean and efficient JavaScript library designed to simplify your development process. Explore the powerful features and easy-to-use API that Ly.JS offers.
           </p>
-          <button className="btn mt-4" onClick={() => window.location.href='https://github.com/Lychan23/Ly.JS'}>
+          <button className="btn mt-4" onClick={() => window.location.href='https://github.com/Lychan23/Ly.JSxPy'}>
             View on GitHub
           </button>
         </Section>

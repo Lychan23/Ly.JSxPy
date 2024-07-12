@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const directoriesToBackup = ['database', 'public', 'app', "dist", "cogs", "middleware", "styles", "ui", 'pages','types','lib','backend'];
+const directoriesToBackup = ['database', 'public', 'app', "dist", "cogs", "middleware", "styles", "ui", 'pages','types','lib','backend','src'];
 const filesToBackup = ['server.js', 'config.json', 'settings.json', 'bot.py', 'package.json', 'tsconfig.json', 'tailwind.config.js', 'postcss.config.js','next.config.mjs']; // Add more files as needed
 const backupDir = path.join(__dirname, 'backup');
 

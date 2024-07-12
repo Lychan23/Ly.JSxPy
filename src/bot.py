@@ -1,12 +1,11 @@
-import os
-import sys
-import platform
-
-
 import json
 import logging
+import os
+import platform
 import random
+import sys
 import asyncio
+
 import aiohttp
 import aiosqlite
 import discord
@@ -18,8 +17,6 @@ from threading import Thread
 
 
 from database import DatabaseManager
-
-
 
 if not os.path.isfile(f"{os.path.realpath(os.path.dirname(__file__))}/config.json"):
     sys.exit("'config.json' not found! Please add it and try again.")

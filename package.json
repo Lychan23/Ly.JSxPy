@@ -8,7 +8,7 @@
     "build": "next build",
     "start": "next start",
     "svr": "node server.js",
-    "dev": "next dev",
+    "dev": "next dev -p 3000",
     "lint": "next lint",
     "start-uvicorn": "uvicorn backend.main:app --reload",
     "backup": "node backup.js",
