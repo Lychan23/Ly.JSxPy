@@ -1,4 +1,5 @@
 {
+  "$schema": "./package.json",
   "name": "ly.jsxpy",
   "version": "1.0.0",
   "description": "",

@@ -10,4 +10,16 @@ projects
 database/database.db
 changenodeenv.js
 node_modules
-dawg
+dawg.txt
+deps
+ai/data/data_math.csv
+ai/data/data_math_validation.csv
+ai/tfx_metadata
+ai/tfx_metadata/lyai
+ai/tfx_pipeline_output
+ai/tfx_pipeline_output/lyai
+ai/tfx_pipeline_output/lyai/CsvExampleGen
+ai/pipeline/__pycache__
+ai/models/keras_model/__pycache__
+ai/models/__pycache__
+ai/__pycache__

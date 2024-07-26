@@ -10,7 +10,7 @@ const handler = (req: ExtendedNextApiRequest, res: NextApiResponse) => {
   io.emit('message', `Starting ${commandArgs === 'docker' ? 'Docker container' : 'bot'}...`);
 
   const isWindows = os.platform() === 'win32';
-  const activateCommand = isWindows ? '.venv\\Scripts\\activate && python -u bot.py' : 'source .venv/bin/activate && python -u bot.py';
+  const activateCommand = isWindows ? 'deps\\Scripts\\activate && python -u bot.py' : 'source deps/bin/activate && python -u bot.py';
   const dockerCommand = `docker run --rm ${process.env.DOCKER}`;
   
   const startCommand = commandArgs === 'docker' ? dockerCommand : activateCommand;

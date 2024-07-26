@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import initializeDb from '../pages/api/db';
+import initializeDb from './db';
 import { User } from '../types/user';
 
 const createUser = async (username: string, password: string) => {

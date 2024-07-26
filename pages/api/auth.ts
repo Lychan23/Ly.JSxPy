@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { serialize } from 'cookie';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import initializeDb from './db';
+import initializeDb from '../../database/db';
 import { User } from '../../types/user';
 
 const JWT_SECRET = process.env.JWT_SECRET;

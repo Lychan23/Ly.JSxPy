@@ -22,6 +22,8 @@
   --panel-text-rgb: 33, 37, 41; /* Dark gray */
   --input-background-rgb: 245, 245, 245; /* Very light gray */
   --input-text-rgb: 33, 37, 41; /* Dark gray */
+  --button-gradient-start: #ff7e5f; /* Gradient start color */
+  --button-gradient-end: #feb47b; /* Gradient end color */
 }
 
 @media (prefers-color-scheme: dark) {
@@ -33,11 +35,21 @@
     --panel-text-rgb: 200, 200, 200; /* Light gray */
     --input-background-rgb: 51, 51, 51; /* Darker gray */
     --input-text-rgb: 200, 200, 200; /* Light gray */
+    --button-gradient-start: #4facfe; /* Gradient start color for dark mode */
+    --button-gradient-end: #00f2fe; /* Gradient end color for dark mode */
   }
 }
 
 .btn {
-  @apply py-2 px-4 bg-gray-900 text-white rounded hover:bg-gray-700 transition duration-300;
+  @apply py-2 px-4 bg-gray-900 text-white rounded transition duration-300;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+.btn:hover {
+  border-image: linear-gradient(45deg, var(--button-gradient-start), var(--button-gradient-end)) 1;
+  background-color: rgb(var(--background-end-rgb));
+  color: rgb(var(--foreground-rgb));
 }
 
 .section {
