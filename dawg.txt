@@ -1,2 +1,0 @@
-$env:NODE_ENV="development"; pnpm install; Remove-Item Env:\NODE_ENV
-python -u setup.py install

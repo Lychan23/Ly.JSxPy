@@ -8,7 +8,7 @@ const DownloadPage: React.FC = () => {
       <p className="text-lg mb-4">Click the buttons below to download the files you need.</p>
       <div className="flex space-x-4">
         <a
-          href="/downloads/installer.exe"
+          href="/downloads/lyjs-installer.exe"
           download
           className="py-2 px-4 rounded text-white font-bold animate-neon"
           style={{
@@ -30,7 +30,7 @@ const DownloadPage: React.FC = () => {
           Download ARM64 Debian Package
         </a>
         <a
-          href="/downloads/installer_0.1.0_amd64.deb"
+          href="/downloads/lyjs-installer_0.1.0_amd64.deb"
           download
           className="py-2 px-4 rounded text-white font-bold animate-neon"
           style={{
@@ -39,6 +39,17 @@ const DownloadPage: React.FC = () => {
           }}
         >
           Download AMD64 Debian Package
+        </a>
+        <a
+          href="/downloads/lyjs-installer.msi"
+          download
+          className="py-2 px-4 rounded text-white font-bold animate-neon"
+          style={{
+            background: 'linear-gradient(270deg, #ff8a00, #e52e71, #9b4bff)',
+            backgroundSize: '400% 400%',
+          }}
+        >
+          Download MSI Windows Package
         </a>
       </div>
     </div>
