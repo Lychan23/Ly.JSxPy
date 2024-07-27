@@ -16,6 +16,7 @@ export default function Navbar() {
           <Link href="#features" className="btn">Features</Link>
           <Link href="#about" className="btn">About</Link>
           <Link href="#contact" className="btn">Contact</Link>
+          <Link href="/documentation" className="btn">Documentation</Link>
           {isVercel ? (
             <Link href="/download" className="btn">Download</Link>
           ) : (
