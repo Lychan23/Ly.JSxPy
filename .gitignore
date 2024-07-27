@@ -23,3 +23,5 @@ ai/pipeline/__pycache__
 ai/models/keras_model/__pycache__
 ai/models/__pycache__
 ai/__pycache__
+python_stuff
+installer
