@@ -33,4 +33,7 @@ ai/models/distilgpt2_tokenizer
 ai/models/mobilenetv2.keras
 ai/models/mobilenetv3
 .pytest_cache
+src
+.prettierignore
+.gitignore
 chores.txt

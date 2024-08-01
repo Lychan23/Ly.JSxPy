@@ -1,37 +1,33 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { exec } from 'child_process';
+import type { NextApiRequest, NextApiResponse } from 'next';
+import { Result } from '@/types/types';  // Adjust the path as necessary
 
-let serverProcess: any = null;
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+    if (req.method === 'POST') {
+        const { input } = req.body;
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
-    const { action } = req.query;
+        try {
+            const response = await fetch('http://localhost:8000/api/webscrape', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ input }),
+            });
 
-    if (action === 'start') {
-        if (serverProcess) {
-            return res.status(400).json({ message: 'Server is already running.' });
-        }
-
-        serverProcess = exec('python ai/main.py', (error, stdout, stderr) => {
-            if (error) {
-                console.error(`exec error: ${error}`);
-                serverProcess = null;
-                return;
+            if (!response.ok) {
+                throw new Error(`Error: ${response.statusText}`);
             }
-            console.log(`stdout: ${stdout}`);
-            console.error(`stderr: ${stderr}`);
-        });
 
-        return res.status(200).json({ message: 'Server started successfully.' });
-    } else if (action === 'stop') {
-        if (!serverProcess) {
-            return res.status(400).json({ message: 'Server is not running.' });
+            const data: { best_result: Result } = await response.json();
+            res.status(200).json(data);
+        } catch (error) {
+            if (error instanceof Error) {
+                res.status(500).json({ message: `Failed to fetch: ${error.message}` });
+            } else {
+                res.status(500).json({ message: 'An unknown error occurred' });
+            }
         }
-
-        serverProcess.kill();
-        serverProcess = null;
-
-        return res.status(200).json({ message: 'Server stopped successfully.' });
     } else {
-        return res.status(400).json({ message: 'Invalid action.' });
+        res.status(405).json({ message: 'Method not allowed' });
     }
 }

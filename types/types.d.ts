@@ -25,3 +25,16 @@ declare module 'bcrypt' {
 }
 
 declare module 'socket.io-client'
+
+// global.d.ts
+declare global {
+  var serverProcess: import('child_process').ChildProcess | undefined;
+}
+
+export {};
+
+// types.ts
+export interface Result {
+  title: string;
+  description: string;
+}

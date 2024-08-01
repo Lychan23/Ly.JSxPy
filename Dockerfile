@@ -1,42 +1,33 @@
-# Use the official Python image from the Docker Hub
-FROM python:3.11.7-slim
+# Use a base image with Node.js
+FROM node:18-slim
 
-# Set the working directory in the container
-WORKDIR /src
+# Install Python and other necessary packages
+RUN apt-get update && \
+    apt-get install -y python3 python3-pip python3-venv && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
-# Install necessary dependencies
-RUN apt-get update && apt-get install -y \
-    libjpeg-dev \
-    libtiff-dev \
-    libsdl1.2-dev \
-    libsdl-image1.2-dev \
-    libsdl-mixer1.2-dev \
-    libsdl-ttf2.0-dev \
-    libsmpeg-dev \
-    libportmidi-dev \
-    libavformat-dev \
-    libswscale-dev \
-    libv4l-dev \
-    libxvidcore-dev \
-    libx264-dev \
-    x264 \
-    libgtk-3-dev \
-    libatlas-base-dev \
-    gfortran \
-    build-essential \
-    libespeak-dev \
-    xvfb \
-    && rm -rf /var/lib/apt/lists/*
+# Set up working directory
+WORKDIR /app
 
-# Copy requirements.txt and install Python dependencies
-COPY src/requirements.txt /src/requirements.txt
-RUN pip install --no-cache-dir -r /src/requirements.txt
+# Copy package.json and package-lock.json for npm
+COPY package*.json ./
 
-# Copy the rest of the application code to the working directory
-COPY src /src
+# Install Node.js dependencies
+RUN npm install
 
-# Make port 8080 available to the world outside this container
-EXPOSE 8080
+# Copy the application code, excluding files specified in .dockerignore
+COPY . .
 
-# Run bot.py with Xvfb when the container launches
-CMD ["python", "bot.py"]
+# Create a virtual environment and install Python dependencies
+RUN python3 -m venv /app/venv
+RUN /app/venv/bin/pip install -r requirements.txt
+
+# Build the Node.js application
+RUN npm run build
+
+# Expose any ports your app uses (adjust as necessary)
+EXPOSE 3000  # Change this if your app uses a different port
+
+# Run the application using the virtual environment's Python
+CMD ["/app/venv/bin/python", "runner.py"]

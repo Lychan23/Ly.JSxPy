@@ -1,22 +1,20 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { exec } from 'child_process';
-import { Server as SocketIOServer } from 'socket.io';
 
-interface ExtendedNextApiRequest extends NextApiRequest {
-  io: SocketIOServer;
-}
-
-export default function handler(req: ExtendedNextApiRequest, res: NextApiResponse) {
-  exec('pnpm svr', (error: any, stdout: any, stderr: any) => {
-    if (error) {
-      console.error(`Error: ${error.message}`);
-      return res.status(500).send('Failed to start the server');
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+    if (req.method === 'POST') {
+        if (!global.serverProcess) {
+            global.serverProcess = exec('npm run start-aiserver', (error) => {
+                if (error) {
+                    console.error(`Error starting server: ${error}`);
+                    global.serverProcess = undefined;
+                }
+            });
+            return res.status(200).json({ status: 'Server started' });
+        } else {
+            return res.status(200).json({ status: 'Server is already running' });
+        }
+    } else {
+        return res.status(405).json({ message: 'Method not allowed' });
     }
-    if (stderr) {
-      console.error(`stderr: ${stderr}`);
-      return res.status(500).send('Failed to start the server');
-    }
-    req.io.emit('activity', 'Server started');
-    res.send('Server started');
-  });
 }

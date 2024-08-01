@@ -1,4 +1,11 @@
-tfx
+Flask
+transformers
+spacy
+torch
+elasticsearch
+numpy
+textblob
+scrapy
 fastapi
 aiohttp
 aiosqlite
@@ -7,9 +14,7 @@ discord.py
 pygame
 pyttsx3
 pyautogui
-numpy
-imageio
-pynput
 pillow
-flask
+pynput
+imageio
 pydantic

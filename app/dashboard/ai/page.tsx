@@ -1,67 +1,111 @@
-// file path: app/dashboard/ai/page.tsx
+// pages/ai.tsx
+
 "use client"
-import React, { useState } from 'react';
+import { useState, ChangeEvent, FormEvent } from 'react';
 
-const AIDashboard: React.FC = () => {
-    const [prompt, setPrompt] = useState('');
-    const [response, setResponse] = useState('');
-    const [serverStatus, setServerStatus] = useState('stopped');
+export default function AIPage() {
+    const [input, setInput] = useState('');
+    const [messages, setMessages] = useState<{ role: string, content: string }[]>([]);
+    const [error, setError] = useState<string>('');
+    const [feedback, setFeedback] = useState<{ [key: number]: number }>({});
 
-    const handleServerControl = async (action: string) => {
-        const res = await fetch(`/api/ai?action=${action}`);
-        const data = await res.json();
-        if (res.ok) {
-            setServerStatus(action === 'start' ? 'running' : 'stopped');
+    const handleSubmit = async (e: FormEvent) => {
+        e.preventDefault();
+        setError('');
+
+        const userMessage = { role: 'user', content: input };
+        setMessages(prev => [...prev, userMessage]);
+
+        try {
+            const res = await fetch('/api/webscrape', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ input }),
+            });
+
+            if (!res.ok) {
+                throw new Error(`Error: ${res.statusText}`);
+            }
+
+            const data = await res.json();
+            const botMessage = { role: 'bot', content: `Title: ${data.best_result.title}\nDescription: ${data.best_result.description}` };
+            setMessages(prev => [...prev, botMessage]);
+        } catch (error) {
+            if (error instanceof Error) {
+                setError(`Failed to fetch: ${error.message}`);
+            } else {
+                setError('An unknown error occurred');
+            }
         }
-        alert(data.message);
+
+        setInput('');
     };
 
-    const handlePromptSubmit = async () => {
-        const res = await fetch('http://localhost:4500/ai_prompt', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ prompt }),
-        });
-        const data = await res.json();
-        if (res.ok) {
-            setResponse(data.response);
-        } else {
-            alert(data.error);
+    const handleFeedback = async (index: number, feedbackValue: number) => {
+        try {
+            const res = await fetch('/api/feedback', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ feedback: feedbackValue }),
+            });
+
+            if (!res.ok) {
+                throw new Error(`Error: ${res.statusText}`);
+            }
+
+            setFeedback(prev => ({ ...prev, [index]: feedbackValue }));
+        } catch (error) {
+            if (error instanceof Error) {
+                setError(`Failed to send feedback: ${error.message}`);
+            } else {
+                setError('An unknown error occurred');
+            }
         }
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-backgroundStart to-backgroundEnd flex flex-col items-center py-10">
-            <h1 className="text-4xl font-bold mb-8">AI Dashboard</h1>
-            <div className="control-panel p-6 rounded-lg shadow-lg mb-8">
-                <div className="mb-4">
-                    <button className="btn mr-4" onClick={() => handleServerControl('start')}>Start Server</button>
-                    <button className="btn" onClick={() => handleServerControl('stop')}>Stop Server</button>
+        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 py-6">
+            <div className="flex flex-col w-full max-w-3xl bg-white rounded-lg shadow-lg p-6">
+                <h1 className="text-2xl font-bold mb-4">AI Web Scraper</h1>
+                <div className="flex flex-col space-y-4 mb-4 overflow-y-auto">
+                    {messages.map((message, index) => (
+                        <div key={index} className={`p-4 rounded-lg ${message.role === 'user' ? 'bg-blue-500 text-white self-end' : 'bg-gray-200 text-gray-800 self-start'}`}>
+                            {message.content}
+                            {message.role === 'bot' && (
+                                <div className="flex space-x-2 mt-2">
+                                    <button
+                                        className={`px-2 py-1 rounded ${feedback[index] === 1 ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-800'}`}
+                                        onClick={() => handleFeedback(index, 1)}
+                                    >
+                                        👍
+                                    </button>
+                                    <button
+                                        className={`px-2 py-1 rounded ${feedback[index] === -1 ? 'bg-red-500 text-white' : 'bg-gray-200 text-gray-800'}`}
+                                        onClick={() => handleFeedback(index, -1)}
+                                    >
+                                        👎
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+                    ))}
                 </div>
-                <p>Server status: <span className="font-semibold">{serverStatus}</span></p>
-            </div>
-            <div className="control-panel p-6 rounded-lg shadow-lg mb-8">
-                <div className="mb-4">
-                    <input 
-                        type="text" 
-                        value={prompt} 
-                        onChange={(e) => setPrompt(e.target.value)} 
-                        placeholder="Enter your prompt" 
-                        className="input w-full p-2 rounded mb-4"
+                <form onSubmit={handleSubmit} className="flex items-center space-x-4">
+                    <input
+                        type="text"
+                        value={input}
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => setInput(e.target.value)}
+                        placeholder="Enter your prompt"
+                        className="flex-1 p-2 border rounded-lg"
                     />
-                    <button className="btn w-full" onClick={handlePromptSubmit}>Send Prompt</button>
-                </div>
+                    <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded-lg">Send</button>
+                </form>
+                {error && <p className="text-red-500 mt-4">{error}</p>}
             </div>
-            {response && (
-                <div className="response-panel p-6 rounded-lg shadow-lg">
-                    <h2 className="text-2xl font-bold mb-4">Response</h2>
-                    <p>{response}</p>
-                </div>
-            )}
         </div>
     );
-};
-
-export default AIDashboard;
+}

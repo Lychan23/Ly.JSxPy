@@ -12,7 +12,9 @@
     "lint": "next lint",
     "start-uvicorn": "uvicorn backend.main:app --reload",
     "backup": "node backup.js",
-    "cnode": "node cnode.js"
+    "cnode": "node cnode.js",
+    "start-aiserver": "uvicorn ai.mobilenetv2.main:app --host 0.0.0.0 --port 8000",
+    "stop-aiserver": "pkill -f 'uvicorn ai/mobilenetv2/main:app'"
   },
   "keywords": [],
   "author": "Lychan23",
@@ -31,6 +33,7 @@
     "eslint": "^9.6.0",
     "js-cookie": "^3.0.5",
     "jsonwebtoken": "^9.0.2",
+    "mathjs": "^13.0.3",
     "next": "^14.2.5",
     "postcss": "^8.4.39",
     "postcss-loader": "^8.1.1",
