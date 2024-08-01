@@ -3,6 +3,7 @@ name: Update Clone Badge
 on:
   schedule:
     - cron: '0 0 * * *'  # Runs daily
+  workflow_dispatch:  # Allows manual triggering
 
 jobs:
   update-badge:
@@ -17,18 +18,18 @@ jobs:
         run: |
           CLONE_COUNT=$(curl -H "Authorization: token ${{ secrets.TOKEN }}" \
                          -s https://api.github.com/repos/Lychan23/Ly.JSxPy/traffic/clones \
-                         | jq '.total')
+                         | jq '.count')
           
           # Use jq to parse the JSON response
           echo "CLONE_COUNT=$CLONE_COUNT" >> $GITHUB_ENV
 
-      - name: Update Clone Badge
+      - name: Update Badge in README.md
         run: |
-          # Use the value of CLONE_COUNT from the previous step
+          # Generate the badge URL
           BADGE_URL="https://img.shields.io/badge/Clones-${{ env.CLONE_COUNT }}-blue"
           
           # Update the README.md with the new badge URL
-          echo "![Clone Count]($BADGE_URL)" > README.md
+          sed -i "s|!\\[Manual Clone Count\\](https://img.shields.io/badge/Clones-.*-blue)|![Manual Clone Count]($BADGE_URL)|" README.md
           
       - name: Commit and push changes
         run: |
