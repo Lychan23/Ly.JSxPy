@@ -1,6 +1,6 @@
 {
   "$schema": "./package.json",
-  "name": "ly.jsxpy",
+  "name": "@lychan23/ly.jsxpy",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -46,5 +46,12 @@
   },
   "devDependencies": {
     "typescript": "5.5.3"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lychan23/Ly.JSxPY.git"
   }
 }

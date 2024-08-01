@@ -1,1 +1,1 @@
-export { middleware as default } from '../middleware/cookieMiddleware';
+export { middleware as default } from '@/middleware/cookieMiddleware';

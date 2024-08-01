@@ -3,153 +3,129 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ly.JSxPy Documentation</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <title>Generate Release Notes</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.4/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
-        body {
-            background-color: #1a202c; /* Dark theme background */
-            color: #a0aec0; /* Light text color */
-            font-family: 'Roboto', sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            height: 100vh; /* Full viewport height */
-            margin: 0;
-            overflow-y: auto; /* Enable vertical scrolling */
-        }
-        .animate-fade {
-            animation: fadeIn 2s ease-in-out;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        .animate-bounce {
-            animation: bounce 2s infinite;
-        }
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {
-                transform: translateY(0);
-            }
-            40% {
-                transform: translateY(-30px);
-            }
-            60% {
-                transform: translateY(-15px);
-            }
-        }
-        .btn {
+        .emoji-selector {
             display: inline-block;
-            padding: 10px 20px;
-            margin-top: 20px;
-            font-size: 16px;
-            font-weight: 700;
-            color: white;
-            background-color: #2d3748; /* Darker background */
+            position: relative;
+        }
+        .emoji-dropdown {
+            display: none;
+            position: absolute;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            z-index: 10;
+        }
+        .emoji-dropdown button {
+            background: none;
             border: none;
-            border-radius: 5px;
+            padding: 5px;
             cursor: pointer;
-            transition: background-color 0.3s;
         }
-        .btn:hover {
-            background-color: #4a5568; /* Lighter background on hover */
-        }
-        .panel {
-            padding: 20px;
-            border-radius: 10px;
-            background-color: #2d3748;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-            max-width: 600px; /* Limit panel width */
-            width: 100%; /* Ensure panel takes full width */
-        }
-        nav {
-            margin-bottom: 20px;
-        }
-        nav a {
-            margin-right: 15px;
-            color: #a0aec0;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        nav a:hover {
-            text-decoration: underline;
-        }
-        main {
-            flex: 1; /* Take remaining vertical space */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start; /* Align content at the top */
-            padding: 20px; /* Add padding for spacing */
+        .emoji-dropdown button:hover {
+            background-color: #f0f0f0;
         }
     </style>
 </head>
-<body>
-    <header class="mb-12">
-        <h1 class="text-4xl font-bold text-white animate-fade">Ly.JSxPy</h1>
-        <p class="text-lg animate-fade">Py-configuration instead of JavaScript</p>
-        <nav>
-            <a href="#intro">Introduction</a>
-            <a href="#features">Features</a>
-            <a href="#advantages">Advantages</a>
-            <a href="#funding">Funding</a>
-            <a href="#repository">Repository</a>
-        </nav>
-    </header>
-    <main>
-        <section id="intro" class="animate-fade">
-            <div class="panel">
-                <h2 class="text-2xl font-semibold text-white">Introduction</h2>
-                <p>Ly.JSxPy is a powerful tool that allows developers to use Python for configuration instead of JavaScript. This can greatly enhance readability, maintainability, and overall development efficiency. The library seamlessly integrates with existing JavaScript projects, providing extensive customization options and reducing the complexity of managing configurations.</p>
+<body class="bg-gray-100 p-8">
+    <h1 class="text-3xl font-bold text-gray-800 mb-6">Generate Release Notes</h1>
+
+    <div class="bg-white p-6 rounded-lg shadow-md mb-8">
+        <form id="release-form">
+            <div class="mb-4">
+                <label for="version" class="block text-gray-700 font-bold mb-2">Version:</label>
+                <input type="text" id="version" name="version" class="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm" placeholder="Enter version (e.g., v1.0.0)">
             </div>
-        </section>
-        <section id="features" class="animate-fade">
-            <div class="panel">
-                <h2 class="text-2xl font-semibold text-white">Features</h2>
-                <ul class="list-disc list-inside space-y-2">
-                    <li>Configuration with Python instead of JavaScript</li>
-                    <li>Seamless integration with existing JavaScript projects</li>
-                    <li>Enhanced readability and maintainability</li>
-                    <li>Extensive customization options</li>
-                    <li>Lightweight and fast</li>
-                    <li>Easy to integrate</li>
-                    <li>Comprehensive documentation</li>
-                    <li>Active community support</li>
-                </ul>
-            </div>
-        </section>
-        <section id="advantages" class="animate-bounce">
-            <div class="panel">
-                <h2 class="text-2xl font-semibold text-white">Advantages</h2>
-                <ul class="list-disc list-inside space-y-2">
-                    <li>Leverage Python's simplicity and power</li>
-                    <li>Reduce complexity in managing configurations</li>
-                    <li>Improved developer productivity</li>
-                    <li>Support for modern development workflows</li>
-                    <li>Robust and user-friendly</li>
-                    <li>Perfect for both beginners and experienced developers</li>
-                </ul>
-            </div>
-        </section>
-        <section id="funding" class="animate-fade">
-            <div class="panel">
-                <h2 class="text-2xl font-semibold text-white">Funding</h2>
-                <p>If you find this project useful and want to support its development, please consider making a donation. Your support is greatly appreciated and helps keep the project alive and growing.</p>
-                <p>Support the project: <a href="https://saweria.co/Lychan23" class="text-blue-400 hover:underline">saweria.co/Lychan23</a></p>
-            </div>
-        </section>
-        <section id="repository" class="animate-fade">
-            <div class="panel">
-                <h2 class="text-2xl font-semibold text-white">Repository</h2>
-                <p>You can view the source code and contribute to the project on GitHub. Your contributions and feedback are welcome and help improve the project.</p>
-                <p>Source code: <a href="https://github.com/Lychan23/Ly.JSxPy" class="text-blue-400 hover:underline">github.com/Lychan23/Ly.JSxPy</a></p>
-                <div class="text-center">
-                    <a href="https://github.com/Lychan23/Ly.JSxPy" class="btn">View Repository</a>
+
+            <div id="features-container">
+                <div class="mb-4 feature-item">
+                    <label class="block text-gray-700 font-bold mb-2">Feature:</label>
+                    <div class="flex items-center">
+                        <textarea class="form-textarea mt-1 block w-full border-gray-300 rounded-md shadow-sm feature-text" placeholder="Enter feature details..."></textarea>
+                        <div class="emoji-selector ml-4">
+                            <button type="button" class="emoji-btn">✔️</button>
+                            <div class="emoji-dropdown">
+                                <button type="button">✔️</button>
+                                <button type="button">❌</button>
+                                <button type="button">🔴</button>
+                                <button type="button">🟢</button>
+                                <button type="button">🟡</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </section>
-    </main>
+
+            <button type="button" id="add-feature" class="bg-blue-500 text-white px-4 py-2 rounded-md shadow-sm">Add New Feature</button>
+            <button type="button" id="generate-markdown" class="bg-green-500 text-white px-4 py-2 rounded-md shadow-sm mt-4">Generate Markdown</button>
+        </form>
+    </div>
+
+    <div class="bg-white p-6 rounded-lg shadow-md mb-8">
+        <h2 class="text-2xl font-semibold text-gray-700 mb-4">Generated Markdown:</h2>
+        <pre id="markdown-output" class="bg-gray-100 p-4 rounded-md overflow-x-auto"></pre>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            // Emoji selector functionality
+            $(document).on('click', '.emoji-btn', function(e) {
+                e.preventDefault();
+                $(this).siblings('.emoji-dropdown').toggle();
+            });
+            $(document).on('click', '.emoji-dropdown button', function(e) {
+                e.preventDefault();
+                var emoji = $(this).text();
+                $(this).closest('.feature-item').find('.emoji-btn').text(emoji);
+                $(this).parent().hide();
+            });
+            $(document).click(function(event) {
+                if (!$(event.target).closest('.emoji-selector').length) {
+                    $('.emoji-dropdown').hide();
+                }
+            });
+
+            // Add new feature
+            $('#add-feature').click(function() {
+                var newFeature = `
+                <div class="mb-4 feature-item">
+                    <label class="block text-gray-700 font-bold mb-2">Feature:</label>
+                    <div class="flex items-center">
+                        <textarea class="form-textarea mt-1 block w-full border-gray-300 rounded-md shadow-sm feature-text" placeholder="Enter feature details..."></textarea>
+                        <div class="emoji-selector ml-4">
+                            <button type="button" class="emoji-btn">✔️</button>
+                            <div class="emoji-dropdown">
+                                <button type="button">✔️</button>
+                                <button type="button">❌</button>
+                                <button type="button">🔴</button>
+                                <button type="button">🟢</button>
+                                <button type="button">🟡</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+                $('#features-container').append(newFeature);
+            });
+
+            // Generate Markdown
+            $('#generate-markdown').click(function() {
+                var version = $('#version').val();
+                var markdownOutput = `## Release Notes\n\n### Version: ${version}\n\n`;
+
+                $('#features-container .feature-item').each(function() {
+                    var featureText = $(this).find('.feature-text').val();
+                    var emoji = $(this).find('.emoji-btn').text();
+                    if (featureText) {
+                        markdownOutput += `- ${emoji} ${featureText}\n`;
+                    }
+                });
+
+                $('#markdown-output').text(markdownOutput);
+            });
+        });
+    </script>
 </body>
 </html>
