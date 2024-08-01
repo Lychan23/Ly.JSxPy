@@ -13,28 +13,24 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Fetch Clone Count
-        id: fetch_clones
+      - name: Get clone count
+        id: get_clone_count
         run: |
           CLONE_COUNT=$(curl -H "Authorization: token ${{ secrets.TOKEN }}" \
-                         -s https://api.github.com/repos/Lychan23/Ly.JSxPy/traffic/clones \
-                         | jq '.count')
-          
-          # Use jq to parse the JSON response
+                         -s https://api.github.com/repos/Lychan23/Ly.JSxPy \
+                         | jq '.clone_count')
           echo "CLONE_COUNT=$CLONE_COUNT" >> $GITHUB_ENV
 
-      - name: Update Badge in README.md
+      - name: Update Clone Badge in README.md
         run: |
-          # Generate the badge URL
           BADGE_URL="https://img.shields.io/badge/Clones-${{ env.CLONE_COUNT }}-blue"
-          
-          # Update the README.md with the new badge URL
-          sed -i "s|!\\[Manual Clone Count\\](https://img.shields.io/badge/Clones-.*-blue)|![Manual Clone Count]($BADGE_URL)|" README.md
-          
+          # Use sed to replace the badge URL in README.md
+          sed -i "s|https://img.shields.io/badge/Clones-.*-blue|$BADGE_URL|g" README.md
+
       - name: Commit and push changes
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
           git add README.md
-          git commit -m "Update clone count badge"
+          git diff --cached --quiet || git commit -m "Update clone count badge"
           git push
