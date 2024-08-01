@@ -16,10 +16,10 @@ jobs:
       - name: Get clone count
         id: get_clone_count
         run: |
-          CLONE_COUNT=$(curl -H "Authorization: token ${{ secrets.TOKEN }}" \
+          CLONE_COUNT=$(curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
                          -s https://api.github.com/repos/Lychan23/Ly.JSxPy \
                          | jq '.clone_count')
-          echo "CLONE_COUNT=$CLONE_COUNT" >> $GITHUB_ENV
+          echo "CLONE_COUNT=${CLONE_COUNT}" >> $GITHUB_ENV
 
       - name: Update Clone Badge in README.md
         run: |
@@ -34,3 +34,5 @@ jobs:
           git add README.md
           git diff --cached --quiet || git commit -m "Update clone count badge"
           git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
