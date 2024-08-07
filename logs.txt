@@ -1,0 +1,337 @@
+2024-08-02 15:41:46,824 - DEBUG - Creating converter from 3 to 5
+2024-08-02 15:41:58,928 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8000
+ * Running on http://192.168.0.182:8000
+2024-08-02 15:41:58,928 - INFO - [33mPress CTRL+C to quit[0m
+2024-08-02 15:42:05,785 - ERROR - No output from subprocess: 2024-08-02 15:42:05 [scrapy.core.scraper] ERROR: Spider error processing <GET https://www.google.com/webhp> (referer: None)
+Traceback (most recent call last):
+  File "/home/lychan23/Desktop/Ly.JSxPY/deps/lib/python3.10/site-packages/scrapy/utils/defer.py", line 81, in mustbe_deferred
+    result = f(*args, **kw)
+  File "/home/lychan23/Desktop/Ly.JSxPY/deps/lib/python3.10/site-packages/scrapy/core/spidermw.py", line 94, in _process_spider_input
+    return scrape_func(response, request, spider)
+  File "/home/lychan23/Desktop/Ly.JSxPY/deps/lib/python3.10/site-packages/scrapy/core/scraper.py", line 210, in call_spider
+    warn_on_generator_with_return_value(spider, callback)
+  File "/home/lychan23/Desktop/Ly.JSxPY/deps/lib/python3.10/site-packages/scrapy/utils/misc.py", line 281, in warn_on_generator_with_return_value
+    if is_generator_with_return_value(callable):
+  File "/home/lychan23/Desktop/Ly.JSxPY/deps/lib/python3.10/site-packages/scrapy/utils/misc.py", line 257, in is_generator_with_return_value
+    src = inspect.getsource(func)
+  File "/usr/local/lib/python3.10/inspect.py", line 1147, in getsource
+    lines, lnum = getsourcelines(object)
+  File "/usr/local/lib/python3.10/inspect.py", line 1129, in getsourcelines
+    lines, lnum = findsource(object)
+  File "/usr/local/lib/python3.10/inspect.py", line 958, in findsource
+    raise OSError('could not get source code')
+OSError: could not get source code
+
+2024-08-02 15:42:05,786 - INFO - Episode 0 finished with total reward: -1.0
+2024-08-02 15:42:06,384 - ERROR - Error in step action 0: argument 'ids': 'float' object cannot be interpreted as an integer
+2024-08-02 15:42:06,384 - INFO - Episode 0 finished with total reward: -2.0
+2024-08-02 15:42:06,685 - ERROR - Error in step action 0: argument 'ids': 'float' object cannot be interpreted as an integer
+2024-08-02 15:42:06,686 - INFO - Episode 1 finished with total reward: -1.0
+2024-08-02 15:42:08,635 - ERROR - No output from subprocess: 2024-08-02 15:42:08 [scrapy.core.scraper] ERROR: Spider error processing <GET https://www.google.com/webhp> (referer: None)
+Traceback (most recent call last):
+  File "/home/lychan23/Desktop/Ly.JSxPY/deps/lib/python3.10/site-packages/scrapy/utils/defer.py", line 81, in mustbe_deferred
+    result = f(*args, **kw)
+  File "/home/lychan23/Desktop/Ly.JSxPY/deps/lib/python3.10/site-packages/scrapy/core/spidermw.py", line 94, in _process_spider_input
+    return scrape_func(response, request, spider)
+  File "/home/lychan23/Desktop/Ly.JSxPY/deps/lib/python3.10/site-packages/scrapy/core/scraper.py", line 210, in call_spider
+    warn_on_generator_with_return_value(spider, callback)
+  File "/home/lychan23/Desktop/Ly.JSxPY/deps/lib/python3.10/site-packages/scrapy/utils/misc.py", line 281, in warn_on_generator_with_return_value
+    if is_generator_with_return_value(callable):
+  File "/home/lychan23/Desktop/Ly.JSxPY/deps/lib/python3.10/site-packages/scrapy/utils/misc.py", line 257, in is_generator_with_return_value
+    src = inspect.getsource(func)
+  File "/usr/local/lib/python3.10/inspect.py", line 1147, in getsource
+    lines, lnum = getsourcelines(object)
+  File "/usr/local/lib/python3.10/inspect.py", line 1129, in getsourcelines
+    lines, lnum = findsource(object)
+  File "/usr/local/lib/python3.10/inspect.py", line 958, in findsource
+    raise OSError('could not get source code')
+OSError: could not get source code
+
+2024-08-02 15:42:08,636 - INFO - Episode 2 finished with total reward: -1.0
+2024-08-02 15:42:09,080 - ERROR - Error in step action 0: argument 'ids': 'float' object cannot be interpreted as an integer
+2024-08-02 15:42:09,081 - INFO - Episode 2 finished with total reward: -2.0
+2024-08-02 15:42:10,839 - ERROR - No output from subprocess: 2024-08-02 15:42:10 [scrapy.core.scraper] ERROR: Spider error processing <GET https://www.google.com/webhp> (referer: None)
+Traceback (most recent call last):
+  File "/home/lychan23/Desktop/Ly.JSxPY/deps/lib/python3.10/site-packages/scrapy/utils/defer.py", line 81, in mustbe_deferred
+    result = f(*args, **kw)
+  File "/home/lychan23/Desktop/Ly.JSxPY/deps/lib/python3.10/site-packages/scrapy/core/spidermw.py", line 94, in _process_spider_input
+    return scrape_func(response, request, spider)
+  File "/home/lychan23/Desktop/Ly.JSxPY/deps/lib/python3.10/site-packages/scrapy/core/scraper.py", line 210, in call_spider
+    warn_on_generator_with_return_value(spider, callback)
+  File "/home/lychan23/Desktop/Ly.JSxPY/deps/lib/python3.10/site-packages/scrapy/utils/misc.py", line 281, in warn_on_generator_with_return_value
+    if is_generator_with_return_value(callable):
+  File "/home/lychan23/Desktop/Ly.JSxPY/deps/lib/python3.10/site-packages/scrapy/utils/misc.py", line 257, in is_generator_with_return_value
+    src = inspect.getsource(func)
+  File "/usr/local/lib/python3.10/inspect.py", line 1147, in getsource
+    lines, lnum = getsourcelines(object)
+  File "/usr/local/lib/python3.10/inspect.py", line 1129, in getsourcelines
+    lines, lnum = findsource(object)
+  File "/usr/local/lib/python3.10/inspect.py", line 958, in findsource
+    raise OSError('could not get source code')
+OSError: could not get source code
+
+2024-08-02 15:42:10,840 - INFO - Episode 3 finished with total reward: -1.0
+2024-08-02 15:42:11,186 - ERROR - Error in step action 0: argument 'ids': 'float' object cannot be interpreted as an integer
+2024-08-02 15:42:11,186 - INFO - Episode 3 finished with total reward: -2.0
+2024-08-02 15:42:13,070 - ERROR - No output from subprocess: 2024-08-02 15:42:12 [scrapy.core.scraper] ERROR: Spider error processing <GET https://www.google.com/webhp> (referer: None)
+Traceback (most recent call last):
+  File "/home/lychan23/Desktop/Ly.JSxPY/deps/lib/python3.10/site-packages/scrapy/utils/defer.py", line 81, in mustbe_deferred
+    result = f(*args, **kw)
+  File "/home/lychan23/Desktop/Ly.JSxPY/deps/lib/python3.10/site-packages/scrapy/core/spidermw.py", line 94, in _process_spider_input
+    return scrape_func(response, request, spider)
+  File "/home/lychan23/Desktop/Ly.JSxPY/deps/lib/python3.10/site-packages/scrapy/core/scraper.py", line 210, in call_spider
+    warn_on_generator_with_return_value(spider, callback)
+  File "/home/lychan23/Desktop/Ly.JSxPY/deps/lib/python3.10/site-packages/scrapy/utils/misc.py", line 281, in warn_on_generator_with_return_value
+    if is_generator_with_return_value(callable):
+  File "/home/lychan23/Desktop/Ly.JSxPY/deps/lib/python3.10/site-packages/scrapy/utils/misc.py", line 257, in is_generator_with_return_value
+    src = inspect.getsource(func)
+  File "/usr/local/lib/python3.10/inspect.py", line 1147, in getsource
+    lines, lnum = getsourcelines(object)
+  File "/usr/local/lib/python3.10/inspect.py", line 1129, in getsourcelines
+    lines, lnum = findsource(object)
+  File "/usr/local/lib/python3.10/inspect.py", line 958, in findsource
+    raise OSError('could not get source code')
+OSError: could not get source code
+
+2024-08-02 15:42:13,071 - INFO - Episode 4 finished with total reward: -1.0
+2024-08-02 15:42:13,422 - ERROR - Error in step action 0: argument 'ids': 'float' object cannot be interpreted as an integer
+2024-08-02 15:42:13,423 - INFO - Episode 4 finished with total reward: -2.0
+2024-08-02 15:42:13,709 - ERROR - Error in step action 0: argument 'ids': 'float' object cannot be interpreted as an integer
+2024-08-02 15:42:13,709 - INFO - Episode 5 finished with total reward: -1.0
+2024-08-02 15:42:13,978 - ERROR - Error in step action 0: argument 'ids': 'float' object cannot be interpreted as an integer
+2024-08-02 15:42:13,979 - INFO - Episode 6 finished with total reward: -1.0
+2024-08-02 15:42:14,257 - ERROR - Error in step action 0: argument 'ids': 'float' object cannot be interpreted as an integer
+2024-08-02 15:42:14,258 - INFO - Episode 7 finished with total reward: -1.0
+2024-08-02 15:42:15,707 - ERROR - No output from subprocess: 2024-08-02 15:42:15 [scrapy.core.scraper] ERROR: Spider error processing <GET https://www.google.com/webhp> (referer: None)
+Traceback (most recent call last):
+  File "/home/lychan23/Desktop/Ly.JSxPY/deps/lib/python3.10/site-packages/scrapy/utils/defer.py", line 81, in mustbe_deferred
+    result = f(*args, **kw)
+  File "/home/lychan23/Desktop/Ly.JSxPY/deps/lib/python3.10/site-packages/scrapy/core/spidermw.py", line 94, in _process_spider_input
+    return scrape_func(response, request, spider)
+  File "/home/lychan23/Desktop/Ly.JSxPY/deps/lib/python3.10/site-packages/scrapy/core/scraper.py", line 210, in call_spider
+    warn_on_generator_with_return_value(spider, callback)
+  File "/home/lychan23/Desktop/Ly.JSxPY/deps/lib/python3.10/site-packages/scrapy/utils/misc.py", line 281, in warn_on_generator_with_return_value
+    if is_generator_with_return_value(callable):
+  File "/home/lychan23/Desktop/Ly.JSxPY/deps/lib/python3.10/site-packages/scrapy/utils/misc.py", line 257, in is_generator_with_return_value
+    src = inspect.getsource(func)
+  File "/usr/local/lib/python3.10/inspect.py", line 1147, in getsource
+    lines, lnum = getsourcelines(object)
+  File "/usr/local/lib/python3.10/inspect.py", line 1129, in getsourcelines
+    lines, lnum = findsource(object)
+  File "/usr/local/lib/python3.10/inspect.py", line 958, in findsource
+    raise OSError('could not get source code')
+OSError: could not get source code
+
+2024-08-02 15:42:15,708 - INFO - Episode 8 finished with total reward: -1.0
+2024-08-02 15:42:15,774 - DEBUG - Received input: wikipedia AI
+2024-08-02 15:42:16,293 - DEBUG - Generated search query: 
+2024-08-02 15:42:16,302 - ERROR - Error in step action 0: argument 'ids': 'float' object cannot be interpreted as an integer
+2024-08-02 15:42:16,302 - INFO - Episode 8 finished with total reward: -2.0
+2024-08-02 15:42:17,851 - ERROR - No output from subprocess: 2024-08-02 15:42:17 [scrapy.core.scraper] ERROR: Spider error processing <GET https://www.google.com/webhp> (referer: None)
+Traceback (most recent call last):
+  File "/home/lychan23/Desktop/Ly.JSxPY/deps/lib/python3.10/site-packages/scrapy/utils/defer.py", line 81, in mustbe_deferred
+    result = f(*args, **kw)
+  File "/home/lychan23/Desktop/Ly.JSxPY/deps/lib/python3.10/site-packages/scrapy/core/spidermw.py", line 94, in _process_spider_input
+    return scrape_func(response, request, spider)
+  File "/home/lychan23/Desktop/Ly.JSxPY/deps/lib/python3.10/site-packages/scrapy/core/scraper.py", line 210, in call_spider
+    warn_on_generator_with_return_value(spider, callback)
+  File "/home/lychan23/Desktop/Ly.JSxPY/deps/lib/python3.10/site-packages/scrapy/utils/misc.py", line 281, in warn_on_generator_with_return_value
+    if is_generator_with_return_value(callable):
+  File "/home/lychan23/Desktop/Ly.JSxPY/deps/lib/python3.10/site-packages/scrapy/utils/misc.py", line 257, in is_generator_with_return_value
+    src = inspect.getsource(func)
+  File "/usr/local/lib/python3.10/inspect.py", line 1147, in getsource
+    lines, lnum = getsourcelines(object)
+  File "/usr/local/lib/python3.10/inspect.py", line 1129, in getsourcelines
+    lines, lnum = findsource(object)
+  File "/usr/local/lib/python3.10/inspect.py", line 958, in findsource
+    raise OSError('could not get source code')
+OSError: could not get source code
+
+2024-08-02 15:42:17,852 - INFO - Episode 9 finished with total reward: -1.0
+2024-08-02 15:42:17,899 - ERROR - No output from subprocess: 2024-08-02 15:42:17 [scrapy.core.scraper] ERROR: Spider error processing <GET https://www.google.com/webhp> (referer: None)
+Traceback (most recent call last):
+  File "/home/lychan23/Desktop/Ly.JSxPY/deps/lib/python3.10/site-packages/scrapy/utils/defer.py", line 81, in mustbe_deferred
+    result = f(*args, **kw)
+  File "/home/lychan23/Desktop/Ly.JSxPY/deps/lib/python3.10/site-packages/scrapy/core/spidermw.py", line 94, in _process_spider_input
+    return scrape_func(response, request, spider)
+  File "/home/lychan23/Desktop/Ly.JSxPY/deps/lib/python3.10/site-packages/scrapy/core/scraper.py", line 210, in call_spider
+    warn_on_generator_with_return_value(spider, callback)
+  File "/home/lychan23/Desktop/Ly.JSxPY/deps/lib/python3.10/site-packages/scrapy/utils/misc.py", line 281, in warn_on_generator_with_return_value
+    if is_generator_with_return_value(callable):
+  File "/home/lychan23/Desktop/Ly.JSxPY/deps/lib/python3.10/site-packages/scrapy/utils/misc.py", line 257, in is_generator_with_return_value
+    src = inspect.getsource(func)
+  File "/usr/local/lib/python3.10/inspect.py", line 1147, in getsource
+    lines, lnum = getsourcelines(object)
+  File "/usr/local/lib/python3.10/inspect.py", line 1129, in getsourcelines
+    lines, lnum = findsource(object)
+  File "/usr/local/lib/python3.10/inspect.py", line 958, in findsource
+    raise OSError('could not get source code')
+OSError: could not get source code
+
+2024-08-02 15:42:17,900 - INFO - 127.0.0.1 - - [02/Aug/2024 15:42:17] "[35m[1mPOST /api/webscrape HTTP/1.1[0m" 500 -
+2024-08-02 15:42:18,208 - ERROR - Error in step action 0: argument 'ids': 'float' object cannot be interpreted as an integer
+2024-08-02 15:42:18,208 - INFO - Episode 9 finished with total reward: -2.0
+2024-08-02 15:42:21,310 - ERROR - No output from subprocess: 2024-08-02 15:42:20 [scrapy.core.scraper] ERROR: Spider error processing <GET https://www.google.com/webhp> (referer: None)
+Traceback (most recent call last):
+  File "/home/lychan23/Desktop/Ly.JSxPY/deps/lib/python3.10/site-packages/scrapy/utils/defer.py", line 81, in mustbe_deferred
+    result = f(*args, **kw)
+  File "/home/lychan23/Desktop/Ly.JSxPY/deps/lib/python3.10/site-packages/scrapy/core/spidermw.py", line 94, in _process_spider_input
+    return scrape_func(response, request, spider)
+  File "/home/lychan23/Desktop/Ly.JSxPY/deps/lib/python3.10/site-packages/scrapy/core/scraper.py", line 210, in call_spider
+    warn_on_generator_with_return_value(spider, callback)
+  File "/home/lychan23/Desktop/Ly.JSxPY/deps/lib/python3.10/site-packages/scrapy/utils/misc.py", line 281, in warn_on_generator_with_return_value
+    if is_generator_with_return_value(callable):
+  File "/home/lychan23/Desktop/Ly.JSxPY/deps/lib/python3.10/site-packages/scrapy/utils/misc.py", line 257, in is_generator_with_return_value
+    src = inspect.getsource(func)
+  File "/usr/local/lib/python3.10/inspect.py", line 1147, in getsource
+    lines, lnum = getsourcelines(object)
+  File "/usr/local/lib/python3.10/inspect.py", line 1129, in getsourcelines
+    lines, lnum = findsource(object)
+  File "/usr/local/lib/python3.10/inspect.py", line 958, in findsource
+    raise OSError('could not get source code')
+OSError: could not get source code
+
+2024-08-02 15:42:21,311 - INFO - Episode 10 finished with total reward: -1.0
+2024-08-02 15:42:22,849 - ERROR - No output from subprocess: 2024-08-02 15:42:22 [scrapy.core.scraper] ERROR: Spider error processing <GET https://www.google.com/webhp> (referer: None)
+Traceback (most recent call last):
+  File "/home/lychan23/Desktop/Ly.JSxPY/deps/lib/python3.10/site-packages/scrapy/utils/defer.py", line 81, in mustbe_deferred
+    result = f(*args, **kw)
+  File "/home/lychan23/Desktop/Ly.JSxPY/deps/lib/python3.10/site-packages/scrapy/core/spidermw.py", line 94, in _process_spider_input
+    return scrape_func(response, request, spider)
+  File "/home/lychan23/Desktop/Ly.JSxPY/deps/lib/python3.10/site-packages/scrapy/core/scraper.py", line 210, in call_spider
+    warn_on_generator_with_return_value(spider, callback)
+  File "/home/lychan23/Desktop/Ly.JSxPY/deps/lib/python3.10/site-packages/scrapy/utils/misc.py", line 281, in warn_on_generator_with_return_value
+    if is_generator_with_return_value(callable):
+  File "/home/lychan23/Desktop/Ly.JSxPY/deps/lib/python3.10/site-packages/scrapy/utils/misc.py", line 257, in is_generator_with_return_value
+    src = inspect.getsource(func)
+  File "/usr/local/lib/python3.10/inspect.py", line 1147, in getsource
+    lines, lnum = getsourcelines(object)
+  File "/usr/local/lib/python3.10/inspect.py", line 1129, in getsourcelines
+    lines, lnum = findsource(object)
+  File "/usr/local/lib/python3.10/inspect.py", line 958, in findsource
+    raise OSError('could not get source code')
+OSError: could not get source code
+
+2024-08-02 15:42:22,849 - INFO - Episode 10 finished with total reward: -2.0
+2024-08-02 19:20:46,973 - DEBUG - Creating converter from 3 to 5
+2024-08-02 19:21:07,379 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8000
+ * Running on http://192.168.0.182:8000
+2024-08-02 19:21:07,379 - INFO - [33mPress CTRL+C to quit[0m
+2024-08-02 19:21:12,907 - ERROR - Error in step action 0: argument 'ids': 'float' object cannot be interpreted as an integer
+2024-08-02 19:21:12,908 - INFO - Episode 0 finished with total reward: -1.0
+2024-08-02 19:21:13,181 - ERROR - Error in step action 0: argument 'ids': 'float' object cannot be interpreted as an integer
+2024-08-02 19:21:13,181 - INFO - Episode 1 finished with total reward: -1.0
+2024-08-02 19:21:13,545 - ERROR - Error in step action 0: argument 'ids': 'float' object cannot be interpreted as an integer
+2024-08-02 19:21:13,546 - INFO - Episode 2 finished with total reward: -1.0
+2024-08-02 19:21:13,848 - ERROR - Error in step action 0: argument 'ids': 'float' object cannot be interpreted as an integer
+2024-08-02 19:21:13,849 - INFO - Episode 3 finished with total reward: -1.0
+2024-08-02 19:21:14,140 - ERROR - Error in step action 0: argument 'ids': 'float' object cannot be interpreted as an integer
+2024-08-02 19:21:14,140 - INFO - Episode 4 finished with total reward: -1.0
+2024-08-02 19:21:14,416 - ERROR - Error in step action 0: argument 'ids': 'float' object cannot be interpreted as an integer
+2024-08-02 19:21:14,416 - INFO - Episode 5 finished with total reward: -1.0
+2024-08-02 19:21:14,685 - ERROR - Error in step action 0: argument 'ids': 'float' object cannot be interpreted as an integer
+2024-08-02 19:21:14,685 - INFO - Episode 6 finished with total reward: -1.0
+2024-08-02 19:21:14,960 - ERROR - Error in step action 0: argument 'ids': 'float' object cannot be interpreted as an integer
+2024-08-02 19:21:14,960 - INFO - Episode 7 finished with total reward: -1.0
+2024-08-02 19:21:15,237 - ERROR - Error in step action 0: argument 'ids': 'float' object cannot be interpreted as an integer
+2024-08-02 19:21:15,238 - INFO - Episode 8 finished with total reward: -1.0
+2024-08-02 19:21:15,504 - ERROR - Error in step action 0: argument 'ids': 'float' object cannot be interpreted as an integer
+2024-08-02 19:21:15,505 - INFO - Episode 9 finished with total reward: -1.0
+2024-08-02 19:21:15,773 - ERROR - Error in step action 0: argument 'ids': 'float' object cannot be interpreted as an integer
+2024-08-02 19:21:15,774 - INFO - Episode 10 finished with total reward: -1.0
+2024-08-02 19:21:18,494 - ERROR - No output from subprocess: 
+2024-08-02 19:21:18,494 - INFO - Episode 11 finished with total reward: -1.0
+2024-08-02 19:21:18,858 - ERROR - Error in step action 0: argument 'ids': 'float' object cannot be interpreted as an integer
+2024-08-02 19:21:18,859 - INFO - Episode 11 finished with total reward: -2.0
+2024-08-02 19:21:19,164 - ERROR - Error in step action 0: argument 'ids': 'float' object cannot be interpreted as an integer
+2024-08-02 19:21:19,164 - INFO - Episode 12 finished with total reward: -1.0
+2024-08-02 19:21:19,462 - ERROR - Error in step action 0: argument 'ids': 'float' object cannot be interpreted as an integer
+2024-08-02 19:21:19,462 - INFO - Episode 13 finished with total reward: -1.0
+2024-08-02 19:21:21,144 - ERROR - No output from subprocess: 
+2024-08-02 19:21:21,145 - INFO - Episode 14 finished with total reward: -1.0
+2024-08-02 19:21:21,446 - ERROR - Error in step action 0: argument 'ids': 'float' object cannot be interpreted as an integer
+2024-08-02 19:21:21,447 - INFO - Episode 14 finished with total reward: -2.0
+2024-08-02 19:21:21,717 - ERROR - Error in step action 0: argument 'ids': 'float' object cannot be interpreted as an integer
+2024-08-02 19:21:21,718 - INFO - Episode 15 finished with total reward: -1.0
+2024-08-02 19:21:23,176 - ERROR - No output from subprocess: 
+2024-08-02 19:21:23,176 - INFO - Episode 16 finished with total reward: -1.0
+2024-08-02 19:21:24,604 - ERROR - No output from subprocess: 
+2024-08-02 19:21:24,604 - INFO - Episode 16 finished with total reward: -2.0
+2024-08-02 19:21:24,884 - ERROR - Error in step action 0: argument 'ids': 'float' object cannot be interpreted as an integer
+2024-08-02 19:21:24,884 - INFO - Episode 16 finished with total reward: -3.0
+2024-08-02 19:21:25,161 - ERROR - Error in step action 0: argument 'ids': 'float' object cannot be interpreted as an integer
+2024-08-02 19:21:25,161 - INFO - Episode 17 finished with total reward: -1.0
+2024-08-02 19:21:26,626 - ERROR - No output from subprocess: 
+2024-08-02 19:21:26,627 - INFO - Episode 18 finished with total reward: -1.0
+2024-08-02 19:21:26,903 - ERROR - Error in step action 0: argument 'ids': 'float' object cannot be interpreted as an integer
+2024-08-02 19:21:26,903 - INFO - Episode 18 finished with total reward: -2.0
+2024-08-02 19:21:27,178 - ERROR - Error in step action 0: argument 'ids': 'float' object cannot be interpreted as an integer
+2024-08-02 19:21:27,179 - INFO - Episode 19 finished with total reward: -1.0
+2024-08-02 19:21:27,487 - ERROR - Error in step action 0: argument 'ids': 'float' object cannot be interpreted as an integer
+2024-08-02 19:21:27,487 - INFO - Episode 20 finished with total reward: -1.0
+2024-08-02 19:21:28,874 - ERROR - No output from subprocess: 
+2024-08-02 19:21:28,874 - INFO - Episode 21 finished with total reward: -1.0
+2024-08-02 19:21:30,314 - ERROR - No output from subprocess: 
+2024-08-02 19:21:30,314 - INFO - Episode 21 finished with total reward: -2.0
+2024-08-02 19:21:31,784 - ERROR - No output from subprocess: 
+2024-08-02 19:21:31,785 - INFO - Episode 21 finished with total reward: -3.0
+2024-08-02 19:21:33,342 - ERROR - No output from subprocess: 
+2024-08-02 19:21:33,342 - INFO - Episode 21 finished with total reward: -4.0
+2024-08-02 19:21:33,634 - ERROR - Error in step action 0: argument 'ids': 'float' object cannot be interpreted as an integer
+2024-08-02 19:21:33,634 - INFO - Episode 21 finished with total reward: -5.0
+2024-08-02 19:21:35,055 - ERROR - No output from subprocess: 
+2024-08-02 19:21:35,328 - INFO - Episode 22 finished with total reward: -1.0
+2024-08-02 19:21:35,605 - ERROR - Error in step action 0: argument 'ids': 'float' object cannot be interpreted as an integer
+2024-08-02 19:21:35,652 - INFO - Episode 22 finished with total reward: -2.0
+2024-08-02 19:21:37,330 - ERROR - No output from subprocess: 
+2024-08-02 19:21:37,334 - INFO - Episode 23 finished with total reward: -1.0
+2024-08-02 19:21:38,766 - ERROR - No output from subprocess: 
+2024-08-02 19:21:38,770 - INFO - Episode 23 finished with total reward: -2.0
+2024-08-02 19:21:39,045 - ERROR - Error in step action 0: argument 'ids': 'float' object cannot be interpreted as an integer
+2024-08-02 19:21:39,118 - INFO - Episode 23 finished with total reward: -3.0
+2024-08-02 19:21:39,384 - ERROR - Error in step action 0: argument 'ids': 'float' object cannot be interpreted as an integer
+2024-08-02 19:21:39,388 - INFO - Episode 24 finished with total reward: -1.0
+2024-08-02 19:21:39,660 - ERROR - Error in step action 0: argument 'ids': 'float' object cannot be interpreted as an integer
+2024-08-02 19:21:39,711 - INFO - Episode 25 finished with total reward: -1.0
+2024-08-02 19:21:41,206 - ERROR - No output from subprocess: 
+2024-08-02 19:21:41,209 - INFO - Episode 26 finished with total reward: -1.0
+2024-08-02 19:21:41,514 - ERROR - Error in step action 0: argument 'ids': 'float' object cannot be interpreted as an integer
+2024-08-02 19:21:41,518 - INFO - Episode 26 finished with total reward: -2.0
+2024-08-02 19:21:43,105 - ERROR - No output from subprocess: 
+2024-08-02 19:21:43,121 - INFO - Episode 27 finished with total reward: -1.0
+2024-08-02 19:21:43,417 - ERROR - Error in step action 0: argument 'ids': 'float' object cannot be interpreted as an integer
+2024-08-02 19:21:43,461 - INFO - Episode 27 finished with total reward: -2.0
+2024-08-02 19:21:45,035 - ERROR - No output from subprocess: 
+2024-08-02 19:21:45,039 - INFO - Episode 28 finished with total reward: -1.0
+2024-08-02 19:21:46,589 - ERROR - No output from subprocess: 
+2024-08-02 19:21:46,593 - INFO - Episode 28 finished with total reward: -2.0
+2024-08-02 19:21:46,874 - DEBUG - Received input: wikipedia AI
+2024-08-02 19:21:47,154 - DEBUG - Generated search query: [unused0]
+2024-08-02 19:21:48,191 - ERROR - No output from subprocess: 
+2024-08-02 19:21:48,357 - INFO - Episode 28 finished with total reward: -3.0
+2024-08-02 19:21:48,623 - ERROR - Error in step action 0: argument 'ids': 'float' object cannot be interpreted as an integer
+2024-08-02 19:21:48,626 - INFO - Episode 28 finished with total reward: -4.0
+2024-08-02 19:21:48,896 - ERROR - Error in step action 0: argument 'ids': 'float' object cannot be interpreted as an integer
+2024-08-02 19:21:48,904 - INFO - Episode 29 finished with total reward: -1.0
+2024-08-02 19:21:49,442 - ERROR - No output from subprocess: 
+2024-08-02 19:21:49,443 - INFO - 127.0.0.1 - - [02/Aug/2024 19:21:49] "[35m[1mPOST /api/webscrape HTTP/1.1[0m" 500 -
+2024-08-02 19:21:50,298 - ERROR - No output from subprocess: 
+2024-08-02 19:21:50,301 - INFO - Episode 30 finished with total reward: -1.0
+2024-08-02 19:21:50,578 - ERROR - Error in step action 0: argument 'ids': 'float' object cannot be interpreted as an integer
+2024-08-02 19:21:50,581 - INFO - Episode 30 finished with total reward: -2.0
+2024-08-02 19:21:51,998 - ERROR - No output from subprocess: 
+2024-08-02 19:21:52,003 - INFO - Episode 31 finished with total reward: -1.0
+2024-08-02 19:21:53,568 - ERROR - No output from subprocess: 
+2024-08-02 19:21:53,575 - INFO - Episode 31 finished with total reward: -2.0
+2024-08-02 19:21:55,104 - ERROR - No output from subprocess: 
+2024-08-02 19:21:55,109 - INFO - Episode 31 finished with total reward: -3.0
+2024-08-02 19:21:55,405 - ERROR - Error in step action 0: argument 'ids': 'float' object cannot be interpreted as an integer
+2024-08-02 19:21:55,408 - INFO - Episode 31 finished with total reward: -4.0
+2024-08-02 19:21:56,936 - ERROR - No output from subprocess: 
+2024-08-02 19:21:56,940 - INFO - Episode 32 finished with total reward: -1.0
+2024-08-02 19:21:58,329 - ERROR - No output from subprocess: 
+2024-08-02 19:21:58,331 - INFO - Episode 32 finished with total reward: -2.0
