@@ -18,3 +18,5 @@ pillow
 pynput
 imageio
 pydantic
+scrapy
+torch
