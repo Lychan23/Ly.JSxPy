@@ -8,7 +8,6 @@ dist
 projects
 .vercel
 database/database.db
-changenodeenv.js
 node_modules
 dawg.txt
 deps
@@ -36,3 +35,12 @@ chores.txt
 .idea
 tf_model.h5
 ai/data/sentiment140.csv
+database.sqlite
+__pycache__
+model.safetensors
+spiece.model
+.megaignore
+main
+main/main.cpp
+main/main.h
+t5-small

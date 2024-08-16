@@ -1,12 +1,23 @@
+"""
+runner.py
+
+This script runs a series of commands to build, start, and execute a Python script.
+"""
+
 import subprocess
-import os
 
 def run_build():
     """Run npm build command"""
     print("Running npm build...")
-    result = subprocess.run(["npm", "run", "build"], capture_output=True, text=True)
-    if result.returncode != 0:
-        print(f"Error during build: {result.stderr}")
+    try:
+        subprocess.run(
+            ["npm", "run", "build"],
+            capture_output=True,
+            text=True,
+            check=True
+        )
+    except subprocess.CalledProcessError as e:
+        print(f"Error during build: {e.stderr}")
         return False
     print("Build completed successfully.")
     return True
@@ -14,9 +25,15 @@ def run_build():
 def run_start():
     """Run npm start command"""
     print("Running npm start...")
-    result = subprocess.run(["npm", "run", "start"], capture_output=True, text=True)
-    if result.returncode != 0:
-        print(f"Error during start: {result.stderr}")
+    try:
+        subprocess.run(
+            ["npm", "run", "start"],
+            capture_output=True,
+            text=True,
+            check=True
+        )
+    except subprocess.CalledProcessError as e:
+        print(f"Error during start: {e.stderr}")
         return False
     print("npm start completed successfully.")
     return True
@@ -24,9 +41,15 @@ def run_start():
 def run_python_script():
     """Run the Python script"""
     print("Running ai/main.py...")
-    result = subprocess.run(["python", "ai/main.py"], capture_output=True, text=True)
-    if result.returncode != 0:
-        print(f"Error during Python script execution: {result.stderr}")
+    try:
+        subprocess.run(
+            ["python", "ai/main.py"],
+            capture_output=True,
+            text=True,
+            check=True
+        )
+    except subprocess.CalledProcessError as e:
+        print(f"Error during Python script execution: {e.stderr}")
         return False
     print("Python script executed successfully.")
     return True
