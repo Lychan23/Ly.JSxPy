@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Orbitron } from "next/font/google";
-import "@/styles/global.css";
+import "@/styles/globals.css";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from '@vercel/analytics/react';
 import Navbar from "@/app/components/Navbar";
