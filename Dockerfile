@@ -27,7 +27,7 @@ RUN /app/venv/bin/pip install -r requirements.txt
 RUN npm run build
 
 # Expose any ports your app uses (adjust as necessary)
-EXPOSE 3000  # Change this if your app uses a different port
+EXPOSE 3000  
 
 # Run the application using the virtual environment's Python
 CMD ["/app/venv/bin/python", "runner.py"]

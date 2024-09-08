@@ -27,3 +27,4 @@ VERSION="${MAJOR}.${MINOR}.${PATCH}-rc.${DATE}"
 
 # Output the version code
 echo "Generated Version Code: $VERSION"
+

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 aiohttp
 aiosqlite
 python-dotenv
@@ -9,4 +10,17 @@ numpy
 imageio
 pynput
 pillow
+=======
+aiohttp
+aiosqlite
+python-dotenv
+discord.py
+pygame
+pyttsx3
+pyautogui
+numpy
+imageio
+pynput
+pillow
+>>>>>>> 5d566776e4ceb9d8df3ecbbb8a050a733ad6368e
 flask

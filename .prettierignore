@@ -1,3 +1,6 @@
 .next
 pnpm-lock.yaml
 node_modules
+.next
+pnpm-lock.yaml
+node_modules

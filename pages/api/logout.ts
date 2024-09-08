@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -7,3 +8,14 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   }
   res.status(405).json({ message: 'Method not allowed' });
 }
+=======
+import type { NextApiRequest, NextApiResponse } from 'next';
+
+export default function handler(req: NextApiRequest, res: NextApiResponse) {
+  if (req.method === 'POST') {
+    res.setHeader('Set-Cookie', 'auth-token=; Path=/; Max-Age=0; HttpOnly; Secure; SameSite=Strict');
+    return res.status(200).json({ message: 'Logout successful' });
+  }
+  res.status(405).json({ message: 'Method not allowed' });
+}
+>>>>>>> 5d566776e4ceb9d8df3ecbbb8a050a733ad6368e
