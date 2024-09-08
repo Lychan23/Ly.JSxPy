@@ -1,0 +1,242 @@
+- .dockerignore
+  - .env
+  - .env.example
+  - .eslintrc.json
+  - .gitignore
+  - .prettierignore
+  - .python-version
+  - CODE_OF_CONDUCT.md
+  - CONTRIBUTING.md
+  - Dockerfile
+  - LICENSE
+  - README.md
+  - SECURITY.md
+  - backup.js
+  - bot-start.bat
+  - bot.py
+  - chores.txt
+  - cnode.js
+  - config.json
+  - constraints.txt
+  - directstart.bat
+  - installer.bat
+  - large_file.txt
+  - logs.txt
+  - movie_lines.txt
+  - next-env.d.ts
+  - next.config.mjs
+  - nothin-tosee.txt
+  - package-lock.json
+  - package.json
+  - postcss.config.js
+  - prettier.config.js
+  - requirements.txt
+  - runner.py
+  - server.js
+  - settings.json
+  - structure.js
+  - tailwind.config.js
+  - tsconfig.json
+  - version-generator-rc.sh
+- .github/
+    - .github/FUNDING.yml
+    - .github/dependabot.yml
+  - ISSUE_TEMPLATE/
+      - .github/ISSUE_TEMPLATE/bug_report.md
+      - .github/ISSUE_TEMPLATE/feature_request.md
+    - workflows/
+        - .github/ISSUE_TEMPLATE/workflows/codeql.yml
+        - .github/ISSUE_TEMPLATE/workflows/nextjs.yml
+  - workflows/
+      - .github/workflows/badge-updater.yml
+- .idea/
+    - .idea/.gitignore
+    - .idea/Ly.JSxPY.iml
+    - .idea/misc.xml
+    - .idea/modules.xml
+    - .idea/vcs.xml
+    - .idea/workspace.xml
+  - inspectionProfiles/
+      - .idea/inspectionProfiles/profiles_settings.xml
+- .pytest_cache/
+    - .pytest_cache/.gitignore
+    - .pytest_cache/CACHEDIR.TAG
+    - .pytest_cache/README.md
+  - v/
+    - cache/
+        - .pytest_cache/v/cache/stepwise
+- .vercel/
+    - .vercel/README.txt
+    - .vercel/project.json
+- .vscode/
+    - .vscode/launch.json
+    - .vscode/settings.json
+- ai/
+  - data/
+      - ai/data/sentiment140.csv
+    - ai/download.py
+    - ai/logs.txt
+    - ai/main.py
+    - ai/nlp_model.py
+    - ai/rl_model.py
+    - ai/run_scrapy.py
+    - ai/spider_script.py
+    - ai/train_model.py
+    - ai/web_scraping_env.py
+  - models/
+    - bert-base-uncased/
+        - ai/models/bert-base-uncased/config.json
+        - ai/models/bert-base-uncased/special_tokens_map.json
+        - ai/models/bert-base-uncased/tf_model.h5
+        - ai/models/bert-base-uncased/tokenizer.json
+        - ai/models/bert-base-uncased/tokenizer_config.json
+        - ai/models/bert-base-uncased/vocab.txt
+    - distilbert-base-uncased/
+        - ai/models/distilbert-base-uncased/config.json
+        - ai/models/distilbert-base-uncased/special_tokens_map.json
+        - ai/models/distilbert-base-uncased/tf_model.h5
+        - ai/models/distilbert-base-uncased/tokenizer.json
+        - ai/models/distilbert-base-uncased/tokenizer_config.json
+        - ai/models/distilbert-base-uncased/vocab.txt
+    - distilgpt2_model/
+        - ai/models/distilgpt2_model/config.json
+        - ai/models/distilgpt2_model/generation_config.json
+        - ai/models/distilgpt2_model/tf_model.h5
+    - distilgpt2_tokenizer/
+        - ai/models/distilgpt2_tokenizer/merges.txt
+        - ai/models/distilgpt2_tokenizer/special_tokens_map.json
+        - ai/models/distilgpt2_tokenizer/tokenizer.json
+        - ai/models/distilgpt2_tokenizer/tokenizer_config.json
+        - ai/models/distilgpt2_tokenizer/vocab.json
+    - mobilenetv3/
+        - ai/models/mobilenetv3/mobilenetv3_model.keras
+  - web_scraper/
+      - ai/web_scraper/scrapy.cfg
+    - web_scraper/
+        - ai/web_scraper/web_scraper/__init__.py
+        - ai/web_scraper/web_scraper/items.py
+        - ai/web_scraper/web_scraper/middlewares.py
+        - ai/web_scraper/web_scraper/pipelines.py
+        - ai/web_scraper/web_scraper/settings.py
+      - spiders/
+          - ai/web_scraper/web_scraper/spiders/__init__.py
+          - ai/web_scraper/web_scraper/spiders/multi_spider.py
+- app/
+    - app/_middleware.ts
+    - app/favicon.ico
+    - app/layout.tsx
+    - app/page.tsx
+  - components/
+      - app/components/CookieConsent.tsx
+      - app/components/Navbar.tsx
+      - app/components/Section.tsx
+  - context/
+      - app/context/authContext.tsx
+  - dashboard/
+    - ai/
+        - app/dashboard/ai/page.tsx
+    - command-builder/
+        - app/dashboard/command-builder/page.tsx
+    - control-panel/
+        - app/dashboard/control-panel/_middleware.ts
+        - app/dashboard/control-panel/layout.tsx
+        - app/dashboard/control-panel/page.tsx
+      - app/dashboard/page.tsx
+    - terminal/
+        - app/dashboard/terminal/page.tsx
+  - documentation/
+      - app/documentation/page.tsx
+  - download/
+      - app/download/page.tsx
+  - login/
+      - app/login/page.tsx
+  - register/
+      - app/register/page.tsx
+- backend/
+    - backend/main.py
+- cogs/
+    - cogs/blocker_cog.py
+    - cogs/fun.py
+    - cogs/general.py
+    - cogs/keylogger_cog.py
+    - cogs/moderation.py
+    - cogs/owner.py
+    - cogs/screenrec_cog.py
+    - cogs/screenshot_cog.py
+    - cogs/template.py
+    - cogs/tts_cog.py
+    - cogs/webcam.py
+- database/
+    - database/__init__.py
+    - database/createUser.ts
+    - database/database.sqlite
+    - database/db.ts
+    - database/schema.sql
+- dist/
+  - app/
+      - dist/app/layout.js
+      - dist/app/page.js
+  - public/
+    - dist/tailwind.config.js
+    - dist/tsconfig.tsbuildinfo
+- docs/
+    - docs/Screenshot 2024-07-10 163843.png
+    - docs/index.html
+- installer/
+  - .cargo/
+      - installer/.cargo/config.toml
+    - installer/Cargo.lock
+    - installer/Cargo.toml
+    - installer/build.sh
+    - installer/bundle.toml
+    - installer/favicon.ico
+  - dist/
+  - src/
+      - installer/src/main.rs
+- lib/
+- middleware/
+    - middleware/authMiddleware.ts
+    - middleware/cookieMiddleware.ts
+    - middleware/socketMiddleware.ts
+- pages/
+  - api/
+      - pages/api/accept-cookies.ts
+      - pages/api/ai.ts
+      - pages/api/auth.ts
+      - pages/api/commands.ts
+      - pages/api/feedback.ts
+      - pages/api/load-theme.ts
+      - pages/api/logout.ts
+      - pages/api/projects.ts
+      - pages/api/register.ts
+      - pages/api/save-theme.ts
+      - pages/api/send.ts
+      - pages/api/start-docker.ts
+      - pages/api/start-panel1.ts
+      - pages/api/start-server.ts
+      - pages/api/start.ts
+      - pages/api/stats.ts
+      - pages/api/stop-server.ts
+      - pages/api/stop.ts
+      - pages/api/webscrape.ts
+- projects/
+  - router/
+- public/
+  - downloads/
+      - public/downloads/installer_0.1.0_arm64.deb
+      - public/downloads/lyjs-installer.exe
+      - public/downloads/lyjs-installer.msi
+      - public/downloads/lyjs-installer_0.1.0_amd64.deb
+    - public/index.html
+    - public/next.svg
+    - public/vercel.svg
+- python_stuff/
+    - python_stuff/mirror_test_debian.py
+- styles/
+    - styles/globals.css
+    - styles/main.css
+    - styles/test.html
+- types/
+    - types/types.d.ts
+    - types/user.ts
+- ui/
