@@ -2,11 +2,14 @@ import os
 import requests
 import re
 from bs4 import BeautifulSoup
-from transformers import pipeline, AutoTokenizer, AutoModel
+from transformers import GPT2Tokenizer, GPT2LMHeadModel, pipeline, AutoTokenizer, AutoModel
 from dotenv import load_dotenv
 import logging
 import torch
 from typing import List, Dict
+import discord
+from discord.ext import commands
+from discord.ext.commands import Context
 
 # Load environment variables
 load_dotenv()
@@ -108,35 +111,49 @@ Answer:"""
         logging.error(f"Error in GPT-2 generation: {str(e)}")
         return f"An error occurred during text generation: {str(e)}"
 
-def main():
-    api_key = os.getenv('GOOGLE_API_KEY')
-    cx = os.getenv('GOOGLE_CX')
-    
-    query = input("Enter your search query: ")
-    
-    # Search and retrieve top results
-    search_results = google_search(query, api_key, cx)
-    top_results = get_top_results(search_results)
+class AI(commands.Cog, name="ai"):
+    def __init__(self, bot) -> None:
+        self.bot = bot
+        self.model_name = "gpt2-medium"
+        self.tokenizer = GPT2Tokenizer.from_pretrained(self.model_name)
+        self.model = GPT2LMHeadModel.from_pretrained(self.model_name)
+        self.api_key = os.getenv('GOOGLE_API_KEY')
+        self.cx = os.getenv('GOOGLE_CX')
 
-    # Display search results
-    print("\nSearch Results:")
-    for i, result in enumerate(top_results, 1):
-        print(f"{i}. {result['title']}")
-        print(f"   {result['link']}")
-        print(f"   {result['snippet']}\n")
+    @commands.command(
+        name="ask",
+        help="Ask a question and get a response from the AI."
+    )
+    async def ask(self, context: Context, *, question: str) -> None:
+        """
+        Ask a question and get a response from the AI.
 
-    # Scrape content from top results
-    scraped_texts = [scrape_website(result['link']) for result in top_results]
-    combined_text = " ".join(scraped_texts)
+        :param context: The command context.
+        :param question: The question that should be answered by the AI.
+        """
+        # Perform Google search
+        search_results = google_search(question, self.api_key, self.cx)
+        top_results = get_top_results(search_results)
+        
+        # Scrape content from top results
+        scraped_texts = [scrape_website(result['link']) for result in top_results]
+        combined_text = " ".join(scraped_texts)
+        
+        # Extract key information
+        key_info = extract_key_info(combined_text)
+        
+        # Generate an answer
+        answer = generate_answer(key_info, question)
+        
+        # Send response to Discord
+        embed = discord.Embed(
+            title="**AI Response:**",
+            description=answer,
+            color=0xBEBEFE,
+        )
+        embed.set_footer(text=f"The question was: {question}")
+        await context.send(embed=embed)
 
-    # Extract key information
-    key_info = extract_key_info(combined_text)
-    
-    # Generate answer
-    answer = generate_answer(key_info, query)
+async def setup(bot) -> None:
+    await bot.add_cog(AI(bot))
 
-    print("\nGenerated Answer:")
-    print(answer)
-
-if __name__ == "__main__":
-    main()
