@@ -1,4 +1,3 @@
-// app/context/authContext.tsx
 "use client";
 
 import React, { createContext, useState, useEffect, ReactNode, useContext } from 'react';
@@ -48,20 +47,16 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         setUsername(username);
         setRememberMe(remember);
         setError(null);
-        if (remember) {
-          Cookies.set('auth-token', data.token, { expires: 7 });
-          Cookies.set('username', username, { expires: 7 });
-        } else {
-          Cookies.set('auth-token', data.token);
-          Cookies.set('username', username);
-        }
+        const expires = remember ? 7 : undefined; // `undefined` means session cookie
+        Cookies.set('auth-token', data.token, { expires });
+        Cookies.set('username', username, { expires });
         router.push('/dashboard');
       } else {
         setError(data.message);
-        throw new Error(data.message);
       }
     } catch (error: any) {
-      setError(error.message);
+      setError('An unexpected error occurred');
+      console.error('Login error:', error);
     }
   };
 

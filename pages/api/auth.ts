@@ -2,13 +2,13 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { serialize } from 'cookie';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import initializeDb from '../../database/db';
-import { User } from '../../types/user';
+import initializeDb from '@/database/db';
+import { User } from '@/types/user';
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
-if (!JWT_SECRET) {
-  throw new Error('JWT_SECRET is not defined');
+if (!JWT_SECRET || typeof JWT_SECRET !== 'string') {
+  throw new Error('JWT_SECRET is not defined or is not a string');
 }
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -42,15 +42,15 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     res.setHeader('Set-Cookie', serialize('auth-token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV !== 'development',
-      maxAge: 60 * 60 * 24 * 7,
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: 60 * 60 * 24 * 7, // 7 days
       sameSite: 'strict',
       path: '/',
     }));
 
     return res.status(200).json({ success: true, token });
 
-  } catch (err: unknown) {
+  } catch (err) {
     console.error('Error during authentication:', err);
 
     if (err instanceof SyntaxError && err.message.includes('Unexpected end of JSON input')) {

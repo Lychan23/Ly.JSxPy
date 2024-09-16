@@ -35,7 +35,6 @@ chores.txt
 .idea
 tf_model.h5
 ai/data/sentiment140.csv
-database.sqlite
 __pycache__
 model.safetensors
 spiece.model
@@ -47,3 +46,5 @@ t5-small
 logs.txt
 distilgpt2
 ai/LyChessEngine
+cache
+*.sqlite

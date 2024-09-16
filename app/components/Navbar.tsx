@@ -10,8 +10,17 @@ export default function Navbar() {
 
   const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
 
-  const handleLogout = () => {
-    // Handle logout logic here
+  const handleLogout = async () => {
+    try {
+      // Handle logout logic here
+      // Example: Clear auth tokens, redirect to login
+      if (authContext?.logout) {
+        await authContext.logout();
+        window.location.href = '/auth'; // Redirect to auth page
+      }
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
   };
 
   return (
@@ -33,6 +42,7 @@ export default function Navbar() {
                   <button
                     className="btn flex items-center gap-2"
                     onClick={toggleDropdown}
+                    aria-expanded={isDropdownOpen}
                   >
                     {authContext.username}
                     <svg
@@ -40,6 +50,7 @@ export default function Navbar() {
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
+                      aria-hidden="true"
                     >
                       <path d="M19 9l-7 7-7-7" />
                     </svg>
@@ -54,8 +65,8 @@ export default function Navbar() {
                 </div>
               ) : (
                 <>
-                  <Link href="/login" className="btn">Login</Link>
-                  <Link href="/register" className="btn">Register</Link>
+                  <Link href="/auth?mode=login" className="btn">Login</Link>
+                  <Link href="/auth?mode=register" className="btn">Register</Link>
                 </>
               )}
             </>

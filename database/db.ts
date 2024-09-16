@@ -9,16 +9,25 @@ const initializeDb = async (): Promise<Database> => {
   const dbFilePath = 'database/database.sqlite';
   const schemaPath = 'database/schema.sql';
 
-  db = await open({
-    filename: dbFilePath,
-    driver: sqlite3.Database
-  });
+  try {
+    db = await open({
+      filename: dbFilePath,
+      driver: sqlite3.Database,
+    });
 
-  const schema = readFileSync(schemaPath, 'utf8');
-  await db.exec(schema);
-  console.log('Database schema created/verified.');
+    const schema = readFileSync(schemaPath, 'utf8');
 
-  return db;
+    // Ensure schema is only applied if necessary
+    // Consider versioning schema or checking for existing tables
+
+    await db.exec(schema);
+    console.log('Database schema created/verified.');
+
+    return db;
+  } catch (error) {
+    console.error('Error initializing database:', error);
+    throw error;
+  }
 };
 
 export const sampleQuery = async (userInput: string) => {
@@ -29,6 +38,7 @@ export const sampleQuery = async (userInput: string) => {
     return result;
   } catch (error) {
     console.error('SQL error:', error);
+    throw error;
   }
 };
 
