@@ -5,7 +5,6 @@ torch
 elasticsearch
 numpy
 textblob
-scrapy
 fastapi
 aiohttp
 aiosqlite
@@ -18,4 +17,9 @@ pillow
 pynput
 imageio
 pydantic
-scrapy
+beautifulsoup4
+sentence-transformers
+nltk
+textblob
+scikit-learn
+

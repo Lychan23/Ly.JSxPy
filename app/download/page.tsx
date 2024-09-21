@@ -8,7 +8,7 @@ const DownloadPage: React.FC = () => {
       <p className="text-lg mb-4">Click the buttons below to download the files you need.</p>
       <div className="flex space-x-4">
         <a
-          href="/downloads/lyjs-installer.exe"
+          href="/downloads/install.exe"
           download
           className="py-2 px-4 rounded text-white font-bold animate-neon"
           style={{
