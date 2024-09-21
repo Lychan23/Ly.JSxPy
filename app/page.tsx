@@ -1,10 +1,8 @@
-// app/page.tsx
 "use client";
 import dynamic from 'next/dynamic';
 
 const Navbar = dynamic(() => import('@/app/components/Navbar'));
 const Section = dynamic(() => import('@/app/components/Section'));
-const CookieConsent = dynamic(() => import('@/app/components/CookieConsent'));
 
 export default function Home() {
   return (
@@ -38,7 +36,6 @@ export default function Home() {
           </p>
         </Section>
       </main>
-      <CookieConsent />
       <footer className="bg-gray-900 text-white py-4 text-center">
         <p>&copy; 2024 Ly.JS Project. All rights reserved.</p>
       </footer>

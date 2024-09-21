@@ -18,17 +18,33 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [loggedIn, setLoggedIn] = useState(false);
   const [username, setUsername] = useState<string | null>(null);
-  const [rememberMe, setRememberMe] = useState(true);
+  const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
   useEffect(() => {
-    const authToken = Cookies.get('auth-token');
-    const storedUsername = Cookies.get('username');
-    if (authToken && storedUsername) {
-      setLoggedIn(true);
-      setUsername(storedUsername);
-    }
+    const checkAuthStatus = () => {
+      const authToken = Cookies.get('auth-token');
+      const storedUsername = Cookies.get('username');
+      const storedRememberMe = Cookies.get('rememberMe');
+
+      if (authToken && storedUsername) {
+        setLoggedIn(true);
+        setUsername(storedUsername);
+        setRememberMe(storedRememberMe === 'true');
+      } else {
+        setLoggedIn(false);
+        setUsername(null);
+        setRememberMe(false);
+      }
+    };
+
+    checkAuthStatus();
+    window.addEventListener('storage', checkAuthStatus);
+
+    return () => {
+      window.removeEventListener('storage', checkAuthStatus);
+    };
   }, []);
 
   const login = async (username: string, password: string, remember: boolean) => {
@@ -38,7 +54,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ username, password })
+        body: JSON.stringify({ username, password, rememberMe: remember })
       });
 
       const data = await response.json();
@@ -47,12 +63,15 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         setUsername(username);
         setRememberMe(remember);
         setError(null);
+
         const expires = remember ? 7 : undefined; // `undefined` means session cookie
         Cookies.set('auth-token', data.token, { expires });
         Cookies.set('username', username, { expires });
+        Cookies.set('rememberMe', remember.toString(), { expires });
+
         router.push('/dashboard');
       } else {
-        setError(data.message);
+        setError(data.message || 'Login failed');
       }
     } catch (error: any) {
       setError('An unexpected error occurred');
@@ -63,8 +82,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const logout = () => {
     setLoggedIn(false);
     setUsername(null);
+    setRememberMe(false);
     Cookies.remove('auth-token');
     Cookies.remove('username');
+    Cookies.remove('rememberMe');
     router.push('/login');
   };
 
@@ -75,6 +96,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   );
 };
 
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+};
 
 export default AuthContext;

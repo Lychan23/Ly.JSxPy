@@ -16,7 +16,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     return res.status(405).json({ success: false, message: 'Method not allowed' });
   }
 
-  const { username, password } = req.body;
+  const { username, password, rememberMe } = req.body;
 
   if (!username || !password) {
     return res.status(400).json({ success: false, message: 'Username and password are required' });
@@ -37,18 +37,20 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     const token = jwt.sign({ id: user.id, username: user.username }, JWT_SECRET, {
-      expiresIn: '7d'
+      expiresIn: rememberMe ? '7d' : '1d'
     });
 
-    res.setHeader('Set-Cookie', serialize('auth-token', token, {
+    const cookieOptions = {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      maxAge: 60 * 60 * 24 * 7, // 7 days
-      sameSite: 'strict',
+      maxAge: rememberMe ? 60 * 60 * 24 * 7 * 1000 : undefined, // 7 days in milliseconds if rememberMe, otherwise session cookie
+      sameSite: 'strict' as const,
       path: '/',
-    }));
+    };
 
-    return res.status(200).json({ success: true, token });
+    res.setHeader('Set-Cookie', serialize('auth-token', token, cookieOptions));
+
+    return res.status(200).json({ success: true, token, rememberMe });
 
   } catch (err) {
     console.error('Error during authentication:', err);

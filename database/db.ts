@@ -1,13 +1,17 @@
-// database/db.ts
 import { readFileSync } from 'fs';
 import sqlite3 from 'sqlite3';
 import { open, Database } from 'sqlite';
+import path from 'path';
 
-let db: Database;
+let db: Database | null = null;
 
 const initializeDb = async (): Promise<Database> => {
-  const dbFilePath = 'database/database.sqlite';
-  const schemaPath = 'database/schema.sql';
+  if (db) {
+    return db;
+  }
+
+  const dbFilePath = path.join(process.cwd(), 'database', 'database.sqlite');
+  const schemaPath = path.join(process.cwd(), 'database', 'schema.sql');
 
   try {
     db = await open({
@@ -17,12 +21,16 @@ const initializeDb = async (): Promise<Database> => {
 
     const schema = readFileSync(schemaPath, 'utf8');
 
-    // Ensure schema is only applied if necessary
-    // Consider versioning schema or checking for existing tables
-
+    // Execute schema
     await db.exec(schema);
-    console.log('Database schema created/verified.');
 
+    // Verify table creation
+    const tableCheck = await db.get("SELECT name FROM sqlite_master WHERE type='table' AND name='users'");
+    if (!tableCheck) {
+      throw new Error('Users table not created');
+    }
+
+    console.log('Database initialized successfully.');
     return db;
   } catch (error) {
     console.error('Error initializing database:', error);
@@ -31,8 +39,11 @@ const initializeDb = async (): Promise<Database> => {
 };
 
 export const sampleQuery = async (userInput: string) => {
+  if (!db) {
+    await initializeDb();
+  }
   try {
-    const statement = await db.prepare('SELECT * FROM users WHERE id = ?');
+    const statement = await db!.prepare('SELECT * FROM users WHERE id = ?');
     const result = await statement.get(userInput);
     await statement.finalize();
     return result;

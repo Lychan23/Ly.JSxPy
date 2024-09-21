@@ -4,10 +4,11 @@ import "@/styles/globals.css";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from '@vercel/analytics/react';
 import Navbar from "@/app/components/Navbar";
-import CookieConsent from "@/app/components/CookieConsent";
+import dynamic from 'next/dynamic';
 import { AuthProvider } from "@/app/context/authContext";
 
-// Import Inter font from Google Fonts
+const CookieConsent = dynamic(() => import("@/app/components/CookieConsent"), { ssr: false });
+
 const inter = Inter({ subsets: ["latin"], weight: ["400", "500", "700"] });
 
 export const metadata: Metadata = {
