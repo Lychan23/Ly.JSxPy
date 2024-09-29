@@ -1,0 +1,20 @@
+{
+  "what is the capitacl city of France?": {
+    "hash": "70ced33dbbc93d0d56cce417bfc34316",
+    "result": {
+      "extractive_answer": "",
+      "abstractive_answer": "Paris",
+      "summary": "French President Francois Hollande has announced he will step down at the end of the year, but his successor, Manuel Valls, is expected to take over.",
+      "context_summary": "",
+      "sentiment_score": 0.5291584134101868,
+      "confidence_score": 50.0,
+      "follow_up_questions": [
+        "Human: Given the original question \"what is the capitacl city of France?\" and the provided answer:",
+        "\"Paris\"",
+        "Generate 3 unique follow-up questions that:"
+      ],
+      "sources": [],
+      "processing_time": 468.7635371685028
+    }
+  }
+}
