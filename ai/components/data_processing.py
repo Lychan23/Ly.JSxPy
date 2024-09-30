@@ -84,7 +84,6 @@ class DataProcessor:
                     html = await response.text()
                     soup = BeautifulSoup(html, 'html.parser')
                     
-                    # Remove unwanted elements
                     for element in soup(["script", "style", "nav", "header", "footer", "aside"]):
                         element.decompose()
 
@@ -140,7 +139,7 @@ class DataProcessor:
         current_chunk = ""
         
         for chunk in chunks:
-            if len(chunk.split()) < min_chunk_threshold:  # Discard short chunks
+            if len(chunk.split()) < min_chunk_threshold:
                 logger.warning(f"Discarding short chunk: '{chunk}'")
                 continue
             
@@ -165,28 +164,40 @@ class DataProcessor:
         summaries = []
         
         for i, chunk in enumerate(preprocessed_chunks):
-            if i % 5 == 0:  # Log progress every 5 chunks
+            if i % 5 == 0:
                 logger.info(f"Summarizing chunk {i+1}/{len(preprocessed_chunks)}")
             
+            # Check if the chunk is valid and has enough content
             if not chunk.strip():
                 logger.warning(f"Skipping empty chunk at index {i}")
                 continue
-            
-            if len(chunk.split()) < 50:
+
+            if len(chunk.split()) < 50:  # If the chunk is too small, skip summarization
                 summaries.append(chunk)
             else:
                 try:
+                    # Ensure that the chunk isn't too large for the summarizer
+                    chunk_length = len(chunk.split())
+                    if chunk_length > 512:  # Summarization models typically handle 512 tokens or fewer
+                        logger.warning(f"Chunk {i} is too large with {chunk_length} tokens, truncating.")
+                        chunk = " ".join(chunk.split()[:512])  # Truncate the chunk if too large
+
+                    # Call the summarizer
                     summary_result = self.summarizer(chunk, 
                                                     max_length=self.max_summary_length,
                                                     min_length=30,
                                                     do_sample=False)
+
+                    # Ensure we got a valid response
                     if isinstance(summary_result, list) and summary_result:
                         summary = summary_result[0].get('summary_text', '')
                         summaries.append(summary if summary else chunk[:self.max_summary_length])
                     else:
+                        logger.warning(f"Empty or invalid summarization result for chunk {i}")
                         summaries.append(chunk[:self.max_summary_length])
+
                 except Exception as e:
-                    logger.exception(f"Error summarizing chunk: {str(e)}")
+                    logger.exception(f"Error summarizing chunk {i}: {str(e)}")
                     summaries.append(chunk[:self.max_summary_length])
 
         logger.info(f"Summarization complete. Generated {len(summaries)} summaries.")
@@ -229,7 +240,8 @@ class DataProcessor:
             summarized_chunks = await self.summarize_chunks(chunks)
             ranked_chunks = self.rank_chunks(query, summarized_chunks)
 
-            top_chunks = [chunk for chunk, score in ranked_chunks[:3]]
+            # Make sure we do not index out of bounds
+            top_chunks = [chunk for chunk, score in ranked_chunks[:min(len(ranked_chunks), 3)]]
 
             return raw_text, top_chunks, result.get('link', '')
         except Exception as e:
@@ -257,7 +269,7 @@ async def fetch_and_process_results(query: str, api_key: str, cx: str) -> Tuple[
         return combined_raw_text, "", sources
     
     final_ranked_chunks = processor.rank_chunks(query, processed_chunks)
-    top_final_chunks = [chunk for chunk, _ in final_ranked_chunks[:5]]
+    top_final_chunks = [chunk for chunk, _ in final_ranked_chunks[:min(len(final_ranked_chunks), 5)]]
     
     processed_context = " ".join(top_final_chunks)
     
