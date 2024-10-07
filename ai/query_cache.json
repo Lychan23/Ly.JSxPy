@@ -16,5 +16,114 @@
       "sources": [],
       "processing_time": 468.7635371685028
     }
+  },
+  "what is machine learning?": {
+    "hash": "76a3727f2572140f395632a3628887b8",
+    "result": {
+      "context_summary": "Artificial intelligence is the study of machine learning algorithms and algorithms that can be used to learn from data. medical diagnostics will be automated by 2020. Medical diagnostic software would be lost in the next two decades to automated machine learning medical diagnostic software.",
+      "extractive_answer": "",
+      "abstractive_answer": "Artificial intelligence is the study of machine learning algorithms and algorithms that can be used to learn from data.",
+      "summary": "Artificial intelligence is the study of machine learning algorithms and algorithms that can be used to learn from data, such as images, videos, and text.",
+      "follow_up_questions": [],
+      "sentiment_score": 0.5184534788131714,
+      "confidence_score": 0.0,
+      "sources": [
+        "https://www.ibm.com/topics/machine-learning",
+        "https://mitsloan.mit.edu/ideas-made-to-matter/machine-learning-explained",
+        "https://aws.amazon.com/what-is/machine-learning/",
+        "https://en.wikipedia.org/wiki/Machine_learning",
+        "https://developers.google.com/machine-learning/crash-course"
+      ],
+      "processing_time": 192.27590322494507
+    }
+  },
+  "what is tensorflow": {
+    "hash": "c2c7d99ebb32e95cc1b61b9fda75d199",
+    "result": {
+      "extractive_answer": "<s>",
+      "abstractive_answer": "an open-source platform for machine learning using data flow graphs",
+      "summary": "A look at some of the key findings from a conference on machine learning and artificial intelligence held at the University of California, Berkeley, in the United States.",
+      "context_summary": "TensorFlow is an open-source platform for machine learning using data flow graphs. TensorFlow can be used to develop models for various tasks, including natural language processing, image recognition, handwriting recognition, and different computational-based simulations.",
+      "sentiment_score": 0.9753333330154419,
+      "confidence_score": 17.66,
+      "follow_up_questions": [
+        "Human: You are an expert in generating follow-up questions based on a question and its answer. The original question is: \"what is tensorflow\" and the answer provided is: \"an open-source platform for machine learning using data flow graphs\".",
+        "Please generate exactly 3 unique, thought-provoking follow-up questions that:",
+        "1. Address different dimensions of the topic that were not directly covered in the original question or the provided answer."
+      ],
+      "sources": [
+        "https://www.tensorflow.org/",
+        "https://www.nvidia.com/en-us/glossary/tensorflow/",
+        "https://www.infoworld.com/article/2255099/what-is-tensorflow-the-machine-learning-library-explained.html",
+        "https://www.tensorflow.org/learn",
+        "https://playground.tensorflow.org/",
+        "https://en.wikipedia.org/wiki/TensorFlow",
+        "https://github.com/tensorflow/tensorflow",
+        "https://www.reddit.com/r/learnmachinelearning/comments/5jj1v8/what_is_tensorflow/",
+        "https://www.techtarget.com/searchdatamanagement/definition/TensorFlow",
+        "https://www.databricks.com/glossary/tensorflow-guide"
+      ],
+      "processing_time": 310.0746886730194
+    }
+  },
+  "what is machine learning": {
+    "hash": "4a7f78c7833b7f980b0b03bac8e53006",
+    "result": {
+      "extractive_answer": "",
+      "abstractive_answer": "Artificial intelligence",
+      "summary": "A look at some of the most interesting stories in the world of artificial intelligence over the past few weeks:. (hint: it's not all bad).",
+      "context_summary": "",
+      "sentiment_score": 0.682557225227356,
+      "confidence_score": 50.0,
+      "follow_up_questions": [],
+      "sources": [
+        "https://www.ibm.com/topics/machine-learning",
+        "https://mitsloan.mit.edu/ideas-made-to-matter/machine-learning-explained",
+        "https://aws.amazon.com/what-is/machine-learning/",
+        "https://en.wikipedia.org/wiki/Machine_learning",
+        "https://developers.google.com/machine-learning/crash-course"
+      ],
+      "processing_time": 116.33267092704773
+    }
+  },
+  "what is the capital of Russia": {
+    "hash": "9aefb2b1ee1aaad6f9db26754063a601",
+    "result": {
+      "context_summary": "Moscow is the capital of the Russian Federation, and the largest city in the country. It is a major financial center, and is the worlds largest city. Moscow is also the largest distillery in the world. The city is home to the Russian Grand Duchy of Moscow.",
+      "extractive_answer": "",
+      "abstractive_answer": "Moscow is the capital of the Russian Federation",
+      "summary": "The following is a list of key dates in the history of the Russian capital, Moscow, from 1 January 1917 to 31 December 1991...",
+      "follow_up_questions": [],
+      "sentiment_score": 0.6806957125663757,
+      "confidence_score": 0.0,
+      "sources": [
+        "https://en.wikipedia.org/wiki/Moscow",
+        "https://earth.esa.int/web/earth-watching/image-of-the-week/content/-/asset_publisher/roJg1USfhDm3/content/moscow-russia/indexc2beb52c6a4dd6d25b420864ad6822969dad103a7be26a037303c5036dcd0306.html",
+        "https://www.britannica.com/place/Moscow",
+        "https://carnegieendowment.org/russia-eurasia/politika/2023/10/russias-capital-controls-are-designed-to-aid-putins-2024-re-election?lang=en",
+        "https://forumspb.com/en/o-sankt-peterburge/history/"
+      ],
+      "processing_time": 168.25502157211304
+    }
+  },
+  "how to build a bomb": {
+    "hash": "500d5232466de590501fc9fa55b141d6",
+    "result": {
+      "context_summary": "Tribes and Environmentalists Press Arizona and Federal Officials to Stop Uranium Mining Near the Grand Canyon Water From the Seine Is Cooling the 2024 Summer Olympics How Hot Weather No FEAR Act Open Government OSI Tip Line Plain Language Questions Resilience RSS Site Map Veterans Crisis Line Career Raw: Skip to main content Press Enter.",
+      "extractive_answer": "",
+      "abstractive_answer": "Uranium Projects Air Air Air How",
+      "summary": "Uranium is one of the most valuable commodities in the world, but how much does it actually cost to produce and how does it get around the world?",
+      "follow_up_questions": [],
+      "sentiment_score": 0.8282600045204163,
+      "confidence_score": 0.0,
+      "sources": [
+        "https://www.af.mil/News/Photos/igphoto/2000651868/",
+        "https://reason.com/2024/05/11/the-night-i-asked-chatgpt-how-to-build-a-bomb/",
+        "https://outrider.org/nuclear-weapons/articles/could-chatbot-teach-you-how-build-dirty-bomb",
+        "https://www.reddit.com/r/Minecraft/comments/if13d7/how_to_build_a_nuclear_bomb_in_minecraft/",
+        "https://www.dhs.gov/xlibrary/assets/prep_ied_fact_sheet.pdf"
+      ],
+      "processing_time": 182.22368621826172
+    }
   }
 }

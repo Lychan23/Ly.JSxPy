@@ -13,6 +13,7 @@ from rich.progress import Progress
 from rich.prompt import Prompt
 from rich.theme import Theme
 from functools import lru_cache
+from io import StringIO
 import psutil
 import hashlib
 import logging  # Add this import for logging
@@ -237,17 +238,6 @@ async def performance_monitor():
         
         await asyncio.sleep(5)  # Update every 5 seconds
 
-# Error handling decorator
-def handle_errors(func):
-    async def wrapper(*args, **kwargs):
-        try:
-            return await func(*args, **kwargs)
-        except Exception as e:
-            console.print(f"[bold red]Error:[/bold red] {str(e)}")
-            console.print("Please try again or contact support if the issue persists.")
-            log_error("An error occurred", e)  # Log the error
-    return wrapper
-
 def log_error(message: str, error: Exception):
     """
     Log an error message along with the full stack trace.
@@ -258,3 +248,4 @@ def log_error(message: str, error: Exception):
     logger.error(f"{message}: {str(error)}")
     logger.error("Full traceback:")
     logger.error(traceback.format_exc())  # Log the full stack trace
+    

@@ -30,10 +30,10 @@ from .utils import (
     apply_user_preferences,
     performance_monitor,
     log_user_feedback,
-    handle_errors,
     print_result,
     add_to_query_history
 )
+from data_utility import Config
 
 
 __all__ = [
@@ -62,11 +62,11 @@ __all__ = [
     'apply_user_preferences',
     'performance_monitor',
     'log_user_feedback',
-    'handle_errors',
     'print_result',
-    'add_to_query_history'
+    'add_to_query_history',
+    'Config'
 ]
 
 # Package metadata
-__version__ = '1.1.0'
+__version__ = '1.2.0'
 __author__ = 'Lychan23'

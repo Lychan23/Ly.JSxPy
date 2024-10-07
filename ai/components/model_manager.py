@@ -94,7 +94,7 @@ class ModelManager:
         elif model_name == "sentiment-analysis":
             model_path = "facebook/bart-large-mnli" if mode == "power" else "distilbert-base-uncased-finetuned-sst-2-english"
         elif model_name == "follow-up-questions":
-            model_path = "bigscience/bloom-560m" if mode == "power" else "bigscience/bloom-350m"
+            model_path = "google/flan-t5-large" if mode == "power" else "google/flan-t5-small"
         elif model_name == "prompt-guard":
             model_path = "meta-llama/Prompt-Guard-86M" if mode == "power" else "meta-llama/Prompt-Guard-86M"
         else:

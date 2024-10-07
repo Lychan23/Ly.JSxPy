@@ -13,6 +13,7 @@ from rich.logging import RichHandler
 from rich.traceback import install as install_rich_traceback
 from rich.console import Console
 from rich import print as rprint
+import gc  # Importing garbage collector
 
 # Set up Rich traceback
 install_rich_traceback(show_locals=True)
@@ -73,6 +74,11 @@ async def generate_context_summary(raw_text: str, processed_text: str, query: st
         logger.exception("Error in generate_context_summary")
         console.print_exception(show_locals=True)
         return "Failed to generate context summary due to an error."
+    finally:
+        # Clean up GPU memory
+        del bart_cnn
+        torch.cuda.empty_cache()
+        gc.collect()
 
 async def generate_summary(text: str, mode: str) -> str:
     logger.info("Starting generate_summary")
@@ -105,6 +111,11 @@ async def generate_summary(text: str, mode: str) -> str:
         logger.exception("Error in generate_summary")
         console.print_exception(show_locals=True)
         return "Failed to generate summary due to an error."
+    finally:
+        # Clean up GPU memory
+        del summarize
+        torch.cuda.empty_cache()
+        gc.collect()
 
 async def calculate_confidence_score(abstractive_answer: str, extractive_answer: str, context: str, query: str) -> float:
     logger.info("Starting calculate_confidence_score")
@@ -166,6 +177,11 @@ async def calculate_confidence_score(abstractive_answer: str, extractive_answer:
         logger.exception("Error in calculate_confidence_score")
         console.print_exception(show_locals=True)
         return 0.0
+    finally:
+        # Clean up GPU memory
+        del sentence_transformer
+        torch.cuda.empty_cache()
+        gc.collect()
 
 def calculate_ner_score(text: str) -> float:
     logger.info("Starting calculate_ner_score")
@@ -187,8 +203,8 @@ def calculate_ner_score(text: str) -> float:
 async def generate_follow_up_questions(query: str, answer: str) -> List[str]:
     logger.info("Starting generate_follow_up_questions")
     try:
-        godel_model = await ModelManager.get_model("follow-up-questions")
-        logger.info("BLOOM model loaded")
+        godel_model = await ModelManager.get_model("flan-t5")
+        logger.info("T5 model loaded")
 
         prompt = f"""Human: You are an expert in generating follow-up questions based on a question and its answer. The original question is: "{query}" and the answer provided is: "{answer}".
 
@@ -212,42 +228,29 @@ async def generate_follow_up_questions(query: str, answer: str) -> List[str]:
         
         logger.debug(f"Prompt length: {len(prompt)}")
         
-        input_ids = godel_model["tokenizer"](prompt, return_tensors="pt", max_length=512, truncation=True).input_ids.to(device)
+        input_ids = godel_model["tokenizer"](prompt, return_tensors="pt", truncation=True).input_ids.to(device)
         logger.debug(f"Input shape: {input_ids.shape}")
         
         with torch.no_grad():
-            outputs = godel_model["model"].generate(
-                input_ids, 
-                max_length=200,
-                num_return_sequences=1,
-                num_beams=5, 
-                do_sample=True, 
-                temperature=0.7,
-                no_repeat_ngram_size=3,
-                top_k=50,
-                top_p=0.95
-            )
-        logger.info("Model generation complete")
+            outputs = godel_model["model"].generate(input_ids, max_new_tokens=150, num_beams=5, early_stopping=True)
+
+        response = godel_model["tokenizer"].decode(outputs[0], skip_special_tokens=True)
+        logger.info("Follow-up questions generated successfully")
         
-        generated_text = godel_model["tokenizer"].decode(outputs[0], skip_special_tokens=True, clean_up_tokenization_spaces=True)
-        logger.debug(f"Generated text: {generated_text}")
+        # Extract questions from the response
+        questions = re.findall(r'\d+\.\s(.+)', response)
         
-        questions = [q.strip() for q in generated_text.split('\n') if q.strip()]
-        logger.info(f"Questions extracted: {len(questions)}")
-        
-        while len(questions) < 3:
-            backup_question = f"What other aspects of {query.lower().split()[0]} would be interesting to explore?"
-            questions.append(backup_question)
-        logger.info("Questions list finalized")
-        
-        # Debug print questions
-        rprint({"Generated Questions": questions})
-        
-        return questions[:3]
+        logger.debug(f"Extracted questions: {questions}")
+        return questions[:3]  # Return only the first 3 questions if more are generated
     except Exception as e:
         logger.exception("Error in generate_follow_up_questions")
         console.print_exception(show_locals=True)
-        return [f"Could not generate follow-up questions due to an error: {str(e)}"]
+        return []
+    finally:
+        # Clean up GPU memory
+        del godel_model
+        torch.cuda.empty_cache()
+        gc.collect()
 
 async def filter_and_sort_sentences(text: str, query: str, model_name: str = "roberta-qa", mode: str = "power") -> str:
     logger.info("Starting filter_and_sort_sentences")
@@ -287,6 +290,10 @@ async def filter_and_sort_sentences(text: str, query: str, model_name: str = "ro
         logger.exception("Error in filter_and_sort_sentences")
         console.print_exception(show_locals=True)
         return "Failed to filter and sort sentences due to an error."
+    finally:
+        # Clean up GPU memory
+        torch.cuda.empty_cache()
+        gc.collect()
 
 async def score_sentence(question: str, sentence: str, model_name: str = "roberta-qa", mode: str = "power") -> float:
     logger.info(f"Starting score_sentence for model: {model_name}")
@@ -322,3 +329,7 @@ async def score_sentence(question: str, sentence: str, model_name: str = "robert
         logger.exception("Error in score_sentence")
         console.print_exception(show_locals=True)
         return 0.0
+    finally:
+        # Clean up GPU memory
+        torch.cuda.empty_cache()
+        gc.collect()
