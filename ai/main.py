@@ -20,10 +20,10 @@ from components.offline_answer import offline_mode
 from components.utils import (
     print_result, cache_result, get_cached_result, check_internet_connection,
     format_processing_time, get_user_preferences, apply_user_preferences,
-    performance_monitor, handle_errors, log_error
+    log_error
 )
 from components.safety import SafetyChecker
-
+from handler.err_handler import handle_errors
 
 # Load environment variables
 load_dotenv()
@@ -86,9 +86,6 @@ async def main():
     data_processor = DataProcessor()
     
     history = []
-    
-    # Start performance monitoring in the background
-    monitor_task = asyncio.create_task(performance_monitor())
     
     try:
         async with data_processor:
@@ -215,13 +212,6 @@ async def main():
         logger.critical(f"Critical error in main loop: {str(e)}", exc_info=True)
         console.print("[bold red]Critical Error:[/bold red] The program encountered an unexpected error and needs to exit.")
         console.print(f"Error details: {str(e)}")
-    finally:
-        # Cancel the performance monitoring task when the main loop exits
-        monitor_task.cancel()
-        try:
-            await monitor_task
-        except asyncio.CancelledError:
-            pass
 
 if __name__ == "__main__":
     asyncio.run(main())
