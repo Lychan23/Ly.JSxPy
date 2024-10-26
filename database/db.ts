@@ -14,41 +14,54 @@ const initializeDb = async (): Promise<Database> => {
   const schemaPath = path.join(process.cwd(), 'database', 'schema.sql');
 
   try {
+    // Ensure the database file exists
     db = await open({
       filename: dbFilePath,
       driver: sqlite3.Database,
     });
 
+    // Read and execute schema
     const schema = readFileSync(schemaPath, 'utf8');
-
-    // Execute schema
     await db.exec(schema);
 
-    // Verify table creation
+    // Verify database connection
     const tableCheck = await db.get("SELECT name FROM sqlite_master WHERE type='table' AND name='users'");
+    
     if (!tableCheck) {
-      throw new Error('Users table not created');
+      console.error('Users table not found after initialization');
+      throw new Error('Database initialization failed');
     }
 
-    console.log('Database initialized successfully.');
+    // Check if columns exist before adding them
+    const tableInfo = await db.all('PRAGMA table_info(users)');
+    const columns = tableInfo.map(col => col.name);
+
+    try {
+      // Start transaction
+      await db.exec('BEGIN TRANSACTION');
+
+      // Add mfa_secret if it doesn't exist
+      if (!columns.includes('mfa_secret')) {
+        await db.exec('ALTER TABLE users ADD COLUMN mfa_secret TEXT');
+      }
+
+      // Add mfa_backup_codes if it doesn't exist
+      if (!columns.includes('mfa_backup_codes')) {
+        await db.exec('ALTER TABLE users ADD COLUMN mfa_backup_codes TEXT');
+      }
+
+      // Commit transaction
+      await db.exec('COMMIT');
+    } catch (error) {
+      // Rollback in case of error
+      await db.exec('ROLLBACK');
+      console.error('Error modifying table structure:', error);
+    }
+
+    console.log('Database initialized successfully');
     return db;
   } catch (error) {
-    console.error('Error initializing database:', error);
-    throw error;
-  }
-};
-
-export const sampleQuery = async (userInput: string) => {
-  if (!db) {
-    await initializeDb();
-  }
-  try {
-    const statement = await db!.prepare('SELECT * FROM users WHERE id = ?');
-    const result = await statement.get(userInput);
-    await statement.finalize();
-    return result;
-  } catch (error) {
-    console.error('SQL error:', error);
+    console.error('Database initialization error:', error);
     throw error;
   }
 };

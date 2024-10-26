@@ -4,7 +4,9 @@
 import { useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
 import Link from 'next/link';
+import { useAuth } from '../../context/authContext';
 import chalk from 'chalk';
+import { motion } from "framer-motion";
 
 interface Stats {
   cpu: string;
@@ -31,6 +33,7 @@ const applyColorCoding = (message: string, type: string): string => {
 };
 
 const ControlPanel = () => {
+  const { loggedIn, username } = useAuth();
   const [log, setLog] = useState<string[]>([]);
   const [uvicornLog, setUvicornLog] = useState<string[]>([]);
   const [stats, setStats] = useState<Partial<Stats>>({});
@@ -40,18 +43,15 @@ const ControlPanel = () => {
   const [messageInput, setMessageInput] = useState("");
 
   useEffect(() => {
+    if (!loggedIn) return;
+
     const socket: Socket = io();
 
-    const handleLog = (data: string, type: string = 'INFO') => {
-      const coloredLog = applyColorCoding(data, type);
-      setLog((prev) => [...prev, coloredLog]);
-    };
-
-    socket.on("log", (data: string) => handleLog(data));
+    socket.on("log", (data: string) => setLog((prev) => [...prev, data]));
     socket.on("stats", (data: Stats) => setStats(data));
-    socket.on("activity", (data: string) => handleLog(data, 'INFO'));
+    socket.on("activity", (data: string) => setLog((prev) => [...prev, data]));
     socket.on("userList", (users: string[]) => setUsers(users));
-    socket.on("message", (data: string) => handleLog(data, 'INFO'));
+    socket.on("message", (data: string) => setLog((prev) => [...prev, data]));
     socket.on("uvicornLog", (data: string) => setUvicornLog((prev) => [...prev, data]));
 
     fetchTheme();
@@ -65,7 +65,7 @@ const ControlPanel = () => {
       socket.off("message");
       socket.off("uvicornLog");
     };
-  }, []);
+  }, [loggedIn]);
 
   const fetchTheme = async () => {
     try {
@@ -201,47 +201,33 @@ const ControlPanel = () => {
     }
   };
 
+  if (!loggedIn) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <p className="text-xl font-semibold">Please log in to access the Control Panel.</p>
+      </div>
+    );
+  }
+
   return (
-    <div className={`min-h-screen flex`}>
-      <div className="flex flex-col p-4 bg-gray-800 text-white w-64">
+    <div className={`min-h-screen flex bg-background text-text`}>
+      <motion.div 
+        className="flex flex-col p-4 bg-surface text-text w-64 shadow-lg"
+        initial={{ x: -250 }}
+        animate={{ x: 0 }}
+        transition={{ duration: 0.5 }}
+      >
         <h2 className="text-xl font-semibold mb-4">Control Panel</h2>
-        <button
-          onClick={startBot}
-          className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 mb-2"
-        >
-          Start Bot
-        </button>
-        <button
-          onClick={stopBot}
-          className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 mb-2"
-        >
-          Stop Bot
-        </button>
-        <button
-          onClick={startServer}
-          className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 mb-2"
-        >
-          Start Server
-        </button>
-        <Link href="/command_builder" legacyBehavior>
-          <a className="bg-green-500 text-white p-2 rounded hover:bg-green-600 mb-2">
-            Go to Command Builder
-          </a>
+        <button onClick={startBot} className="btn mb-2">Start Bot</button>
+        <button onClick={stopBot} className="btn mb-2">Stop Bot</button>
+        <button onClick={startServer} className="btn mb-2">Start Server</button>
+        <Link href="/command_builder" className="btn btn-secondary mb-2">
+          Go to Command Builder
         </Link>
         <h2 className="text-xl font-semibold mb-4">Panels Control</h2>
-        <button
-          onClick={startPanel1}
-          className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 mb-2"
-        >
-          Start Panel 1
-        </button>
-        <button
-          onClick={toggleTheme}
-          className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
-        >
-          Toggle Theme
-        </button>
-      </div>
+        <button onClick={startPanel1} className="btn mb-2">Start Panel 1</button>
+        <button onClick={toggleTheme} className="btn">Toggle Theme</button>
+      </motion.div>
       <div className={`flex-grow p-8 rounded shadow-md w-full max-w-2xl control-panel ${theme}`}>
         <h1 className="text-2xl font-bold mb-4 text-center">Bot Control Panel</h1>
         {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
@@ -250,20 +236,15 @@ const ControlPanel = () => {
             type="text"
             id="discordMessage"
             placeholder="Enter text to send to Discord"
-            className="p-2 border border-gray-300 rounded w-full"
+            className="input"
             value={messageInput}
             onChange={(e) => setMessageInput(e.target.value)}
           />
-          <button
-            onClick={sendMessageToDiscord}
-            className="bg-blue-500 text-white p-2 rounded ml-2 hover:bg-blue-600"
-          >
-            Send
-          </button>
+          <button onClick={sendMessageToDiscord} className="btn">Send</button>
         </div>
         <div id="log" className="mb-4">
           <h2 className="text-xl font-semibold mb-2">Log</h2>
-          <div className="bg-gray-100 p-4 rounded h-40 overflow-y-auto dark:bg-gray-800 dark:text-gray-200">
+          <div className="card h-40 overflow-y-auto">
             {log.map((entry, index) => (
               <div key={index} className="text-sm">{entry}</div>
             ))}
@@ -271,7 +252,7 @@ const ControlPanel = () => {
         </div>
         <div id="stats" className="mb-4">
           <h2 className="text-xl font-semibold mb-2">Stats</h2>
-          <div className="bg-gray-100 p-4 rounded dark:bg-gray-800 dark:text-gray-200">
+          <div className="card">
             <p>CPU Load: {stats.cpu || "N/A"}</p>
             <p>Memory Usage: {stats.memory || "N/A"}</p>
             <p>Network Inbound: {stats.networkInbound || "N/A"}</p>
@@ -282,16 +263,16 @@ const ControlPanel = () => {
         </div>
         <div id="users" className="mb-4">
           <h2 className="text-xl font-semibold mb-2">Users</h2>
-          <div className="bg-gray-100 p-4 rounded h-40 overflow-y-auto dark:bg-gray-800 dark:text-gray-200">
+          <div className="card h-40 overflow-y-auto">
             {users.map((user, index) => (
               <div key={index} className="text-sm">{user}</div>
             ))}
           </div>
         </div>
       </div>
-      <div className="flex flex-col p-4 bg-gray-800 text-white w-64">
+      <div className="flex flex-col p-4 bg-surface text-text w-64 shadow-lg">
         <h2 className="text-xl font-semibold mb-4">Uvicorn Log</h2>
-        <div className="bg-gray-100 p-4 rounded h-96 overflow-y-auto dark:bg-gray-800 dark:text-gray-200">
+        <div className="card h-96 overflow-y-auto">
           {uvicornLog.map((entry, index) => (
             <div key={index} className="text-sm">{entry}</div>
           ))}

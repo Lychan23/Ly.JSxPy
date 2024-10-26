@@ -6,7 +6,7 @@
       "esnext"
     ],
     "allowJs": true,
-    "skipLibCheck": true,
+    "skipLibCheck": true,  // Consider changing to false if debugging type issues
     "strict": true,
     "noEmit": false,
     "esModuleInterop": true,
@@ -16,7 +16,7 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "target": "ES2017",
+    "target": "ES2020",  // Updated for broader support of modern JavaScript features
     "outDir": "./dist",
     "typeRoots": ["./node_modules/@types"],
     "plugins": [
@@ -35,9 +35,12 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "./.next/types/**/*.ts",
     "app/**/*.ts",
     "app/**/*.tsx",
+    "pages/**/*.ts",    // Ensure all Next.js pages are included
+    "pages/**/*.tsx",   // Ensure all Next.js pages are included
+    "components/**/*.ts",  // If components are in a folder
+    "components/**/*.tsx"  // If components are in a folder
   ],
   "exclude": [
     "node_modules"

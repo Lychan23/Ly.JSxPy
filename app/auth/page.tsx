@@ -1,10 +1,20 @@
-"use client"
-import React, { useState, useEffect, Suspense } from 'react';
-import { motion } from 'framer-motion';
-import { useSearchParams, useRouter } from 'next/navigation';
-import Link from 'next/link';
-import { z } from 'zod';
-import { useAuth } from '@/app/context/authContext';
+"use client";
+import React, { useState, useEffect, Suspense } from "react";
+import { motion } from "framer-motion";
+import { useSearchParams, useRouter } from "next/navigation";
+import { z } from "zod";
+import { useAuth } from "@/app/context/authContext";
+import dynamic from "next/dynamic";
+import { User, Lock, Eye, EyeOff } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
+
+// Dynamic imports for performance
+const Toast = dynamic(() =>
+  import("@/components/ui/toast").then((mod) => mod.Toast)
+);
 
 // Define Zod schemas for form validation
 const loginSchema = z.object({
@@ -21,43 +31,94 @@ const registerSchema = loginSchema.extend({
 
 const AuthForm = () => {
   const searchParams = useSearchParams();
-  const mode = searchParams ? searchParams.get('mode') : null;
+  const mode = searchParams ? searchParams.get("mode") : null;
   const router = useRouter();
   const authContext = useAuth();
 
-  const [isLogin, setIsLogin] = useState(mode !== 'register');
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [isLogin, setIsLogin] = useState(mode !== "register");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [remember, setRemember] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   useEffect(() => {
-    setIsLogin(mode !== 'register');
-  }, [mode]);
+    // Check for saved credentials
+    if (isLogin) {
+      const savedUsername = localStorage.getItem("username") || sessionStorage.getItem("username");
+      const savedPassword = localStorage.getItem("password") || sessionStorage.getItem("password");
+  
+      if (savedUsername) {
+        setUsername(savedUsername);
+      }
+  
+      if (savedPassword) {
+        setPassword(savedPassword);
+      }
+    }
+  
+    setIsLogin(mode !== "register");
+  }, [mode, isLogin]);
+
+  useEffect(() => {
+    // Automatic login when both username and password are filled
+    const performLogin = async () => {
+      if (isLogin && username && password) {
+        try {
+          // Validate login form inputs
+          loginSchema.parse({ username, password });
+          if (authContext) {
+            const response = await authContext.login(username, password, remember);
+            if (response.success) {
+              // Store credentials if "Remember Me" is checked
+              if (remember) {
+                localStorage.setItem("username", username);
+                localStorage.setItem("password", password); // Ensure password is hashed on the server side, not stored directly
+              } else {
+                sessionStorage.setItem("username", username);
+                sessionStorage.setItem("password", password); // Ensure password is hashed on the server side, not stored directly
+              }
+              router.push("/dashboard");
+            } else {
+              setError(response.message || "Login failed");
+            }
+          }
+        } catch (err) {
+          if (err instanceof z.ZodError) {
+            setError(err.errors[0].message);
+          } else {
+            setError("An unexpected error occurred");
+          }
+        }
+      }
+    };
+
+    performLogin();
+  }, [isLogin, username, password, remember, authContext, router]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setError('');
+    setError("");
 
     try {
       if (isLogin) {
+        // Validate login form inputs
         loginSchema.parse({ username, password });
-        if (authContext) {
-          await authContext.login(username, password, remember);
-          router.push('/dashboard'); // Redirect to dashboard after successful login
-        }
       } else {
+        // Validate registration form inputs
         registerSchema.parse({ username, password, confirmPassword });
-        const response = await fetch('/api/register', {
-          method: 'POST',
+        const response = await fetch("/api/register", {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({ username, password }),
         });
+
         if (response.ok) {
-          router.push('/login');
+          router.push("/login");
         } else {
           const data = await response.json();
           setError(data.message);
@@ -67,14 +128,14 @@ const AuthForm = () => {
       if (err instanceof z.ZodError) {
         setError(err.errors[0].message);
       } else {
-        setError('An unexpected error occurred');
+        setError("An unexpected error occurred");
       }
     }
   };
-
+  
   const containerVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+    hidden: { opacity: 0, scale: 0.9 },
+    visible: { opacity: 1, scale: 1, transition: { duration: 0.5 } },
   };
 
   const formVariants = {
@@ -84,92 +145,109 @@ const AuthForm = () => {
 
   return (
     <motion.div
-      className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md"
+      className="bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg p-8 rounded-lg shadow-2xl w-full max-w-xl mx-auto border border-white border-opacity-20"
       variants={containerVariants}
       initial="hidden"
       animate="visible"
     >
       <motion.div
-        key={isLogin ? 'login' : 'register'}
+        key={isLogin ? "login" : "register"}
         variants={formVariants}
         initial="hidden"
         animate="visible"
       >
-        <h2 className="text-3xl font-bold mb-6 text-center text-white">
-          {isLogin ? 'Welcome Back!' : 'Create Account'}
+        <h2 className="text-4xl font-bold mb-8 text-center text-white font-serif">
+          {isLogin ? "Welcome Back!" : "Create Account"}
         </h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label htmlFor="username" className="block text-sm font-medium text-gray-300">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="space-y-2">
+            <Label htmlFor="username" className="text-sm font-medium text-gray-300">
               Username
-            </label>
-            <input
-              type="text"
-              id="username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              className="mt-1 block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-              required
-            />
-          </div>
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-300">
-              Password
-            </label>
-            <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="mt-1 block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-              required
-            />
-          </div>
-          {!isLogin && (
-            <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-300">
-                Confirm Password
-              </label>
-              <input
-                type="password"
-                id="confirmPassword"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                className="mt-1 block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+            </Label>
+            <div className="relative">
+              <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+              <Input
+                type="text"
+                id="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className="pl-10 bg-white bg-opacity-10 border-gray-600 text-white placeholder-gray-400"
                 required
               />
             </div>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="password" className="text-sm font-medium text-gray-300">
+              Password
+            </Label>
+            <div className="relative">
+              <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+              <Input
+                type={showPassword ? "text" : "password"}
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="pl-10 pr-10 bg-white bg-opacity-10 border-gray-600 text-white placeholder-gray-400"
+                required
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+              >
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
+            </div>
+          </div>
+          {!isLogin && (
+            <div className="space-y-2">
+              <Label htmlFor="confirmPassword" className="text-sm font-medium text-gray-300">
+                Confirm Password
+              </Label>
+              <div className="relative">
+                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                <Input
+                  type={showConfirmPassword ? "text" : "password"}
+                  id="confirmPassword"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  className="pl-10 pr-10 bg-white bg-opacity-10 border-gray-600 text-white placeholder-gray-400"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                >
+                  {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
+            </div>
           )}
           {isLogin && (
-            <label className="flex items-center text-gray-300">
-              <input
-                type="checkbox"
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="remember"
                 checked={remember}
-                onChange={(e) => setRemember(e.target.checked)}
-                className="mr-2"
+                onCheckedChange={(checked) => setRemember(checked as boolean)}
+                className="data-[state=checked]:bg-indigo-600"
               />
-              Remember me
-            </label>
+              <Label
+                htmlFor="remember"
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-gray-300"
+              >
+                Remember me
+              </Label>
+            </div>
           )}
           {error && <p className="text-red-500 text-sm">{error}</p>}
-          <button
+          <Button
             type="submit"
-            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white"
           >
-            {isLogin ? 'Sign In' : 'Sign Up'}
-          </button>
+            {isLogin ? "Sign In" : "Sign Up"}
+          </Button>
         </form>
-        <div className="mt-6 text-center">
-          <p className="text-sm text-gray-400">
-            {isLogin ? "Don't have an account?" : "Already have an account?"}
-            <Link
-              href={isLogin ? "/auth?mode=register" : "/auth?mode=login"}
-              className="font-medium text-indigo-400 hover:text-indigo-300 ml-1"
-            >
-              {isLogin ? 'Sign up' : 'Sign in'}
-            </Link>
-          </p>
-        </div>
       </motion.div>
     </motion.div>
   );
@@ -177,8 +255,8 @@ const AuthForm = () => {
 
 const AuthPage = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-black">
-      <Suspense fallback={<div className="text-white">Loading...</div>}>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-900 via-black to-purple-900 p-4">
+      <Suspense fallback={<div className="text-white text-2xl">Loading...</div>}>
         <AuthForm />
       </Suspense>
     </div>

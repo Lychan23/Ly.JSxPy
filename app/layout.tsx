@@ -1,14 +1,18 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "@/styles/globals.css";
-import { SpeedInsights } from "@vercel/speed-insights/next";
-import { Analytics } from '@vercel/analytics/react';
-import Navbar from "@/app/components/Navbar";
-import dynamic from 'next/dynamic';
+import dynamic from "next/dynamic";
 import { AuthProvider } from "@/app/context/authContext";
 
+// Dynamically imported components
 const CookieConsent = dynamic(() => import("@/app/components/CookieConsent"), { ssr: false });
+const Navbar = dynamic(() => import("@/app/components/Navbar"));
+const SpeedInsights = dynamic(() =>
+  import("@vercel/speed-insights/next").then(mod => mod.SpeedInsights), { ssr: false });
+const Analytics = dynamic(() =>
+  import("@vercel/analytics/react").then(mod => mod.Analytics), { ssr: false });
 
+// Load the Inter font
 const inter = Inter({ subsets: ["latin"], weight: ["400", "500", "700"] });
 
 export const metadata: Metadata = {
@@ -16,25 +20,20 @@ export const metadata: Metadata = {
   description: "Ly.JSxPY system",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body className={inter.className}>
         <AuthProvider>
-          <Navbar />
-          <main className="pt-20">
-            {children}
-          </main>
+          <div className="flex flex-col min-h-screen">
+            <Navbar />
+            <main className="flex-grow pt-16"> {/* Adjusted padding-top */}
+              {children}
+            </main>
+          </div>
           <CookieConsent />
           <Analytics />
           <SpeedInsights />
-          <footer className="bg-gray-900 text-white py-4 text-center">
-            <p>&copy; 2024 Ly.JS Project. All rights reserved.</p>
-          </footer>
         </AuthProvider>
       </body>
     </html>

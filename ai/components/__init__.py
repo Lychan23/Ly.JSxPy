@@ -33,8 +33,6 @@ from .utils import (
     print_result,
     add_to_query_history
 )
-from data_utility import Config
-
 
 __all__ = [
     # Main components
@@ -64,7 +62,7 @@ __all__ = [
     'log_user_feedback',
     'print_result',
     'add_to_query_history',
-    'Config'
+
 ]
 
 # Package metadata

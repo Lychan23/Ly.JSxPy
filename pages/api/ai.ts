@@ -1,33 +1,41 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
-import { Result } from '@/types/types';  // Adjust the path as necessary
+import { NextApiRequest, NextApiResponse } from 'next';
+import Groq from "groq-sdk";
+
+// Initialize Groq with your API key
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    if (req.method === 'POST') {
-        const { input } = req.body;
+  if (req.method !== 'POST') {
+    return res.status(405).json({ message: 'Only POST requests allowed' });
+  }
 
-        try {
-            const response = await fetch('http://localhost:8000/api/webscrape', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ input }),
-            });
+  const { query } = req.body;
 
-            if (!response.ok) {
-                throw new Error(`Error: ${response.statusText}`);
-            }
+  if (!query) {
+    return res.status(400).json({ message: 'Query is required' });
+  }
 
-            const data: { best_result: Result } = await response.json();
-            res.status(200).json(data);
-        } catch (error) {
-            if (error instanceof Error) {
-                res.status(500).json({ message: `Failed to fetch: ${error.message}` });
-            } else {
-                res.status(500).json({ message: 'An unknown error occurred' });
-            }
-        }
+  try {
+    const chatCompletion = await groq.chat.completions.create({
+      messages: [
+        {
+          role: 'user',
+          content: query,
+        },
+      ],
+      model: 'llama-3.1-70b-versatile', // You can replace this with any other model you want to use
+    });
+
+    // Return the AI's response
+    const aiResponse = chatCompletion.choices[0]?.message?.content || 'No response from model';
+    res.status(200).json({ result: aiResponse });
+  } catch (error) {
+    // Type-check the error
+    if (error instanceof Error) {
+      res.status(500).json({ message: 'Error interacting with the model', error: error.message });
     } else {
-        res.status(405).json({ message: 'Method not allowed' });
+      // Handle the case where the error is not an instance of Error
+      res.status(500).json({ message: 'Unknown error occurred' });
     }
+  }
 }

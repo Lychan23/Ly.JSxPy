@@ -1,6 +1,9 @@
 'use client';
+
 import { useState } from 'react';
 import axios from 'axios';
+import { useAuth } from '../../context/authContext';
+import { motion } from 'framer-motion';
 
 interface Command {
   name: string;
@@ -61,12 +64,19 @@ const permissionsList = [
 ];
 
 export default function CommandBuilder() {
+  const { loggedIn, username } = useAuth();
   const [name, setName] = useState<string>('');
   const [desc, setDesc] = useState<string>('');
   const [permission, setPermission] = useState<string[]>([]);
   const [preview, setPreview] = useState<string>('');
+  const [error, setError] = useState<string | null>(null);
 
   const handleGenerate = async () => {
+    if (!loggedIn) {
+      setError("Please log in to generate commands.");
+      return;
+    }
+
     try {
       const response = await axios.post<{ code: string }>('http://localhost:8000/generate-command/', {
         name,
@@ -74,8 +84,10 @@ export default function CommandBuilder() {
         permission,
       });
       setPreview(response.data.code);
+      setError(null);
     } catch (error) {
       console.error('Error generating command:', error);
+      setError("Failed to generate command. Please try again.");
     }
   };
 
@@ -83,36 +95,49 @@ export default function CommandBuilder() {
     setPermission(Array.from(e.target.selectedOptions, option => option.value));
   };
 
+  if (!loggedIn) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <p className="text-xl font-semibold">Please log in to access the Command Builder.</p>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center">
-      <div className="p-8 rounded shadow-md w-full max-w-2xl">
+    <motion.div 
+      className="min-h-screen flex flex-col items-center justify-center bg-background text-text"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
+      <div className="card w-full max-w-2xl">
         <h1 className="text-2xl font-bold mb-4 text-center">Command Builder</h1>
         <form>
           <div className="mb-4">
-            <label>Name:</label>
+            <label className="block mb-2">Name:</label>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="p-2 border border-gray-300 rounded w-full"
+              className="input"
             />
           </div>
           <div className="mb-4">
-            <label>Description:</label>
+            <label className="block mb-2">Description:</label>
             <input
               type="text"
               value={desc}
               onChange={(e) => setDesc(e.target.value)}
-              className="p-2 border border-gray-300 rounded w-full"
+              className="input"
             />
           </div>
           <div className="mb-4">
-            <label>Permission:</label>
+            <label className="block mb-2">Permission:</label>
             <select
               multiple
               value={permission}
               onChange={handlePermissionChange}
-              className="p-2 border border-gray-300 rounded w-full"
+              className="input"
             >
               {permissionsList.map((perm) => (
                 <option key={perm.value} value={perm.value}>{perm.label}</option>
@@ -122,20 +147,21 @@ export default function CommandBuilder() {
           <button
             type="button"
             onClick={handleGenerate}
-            className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+            className="btn w-full"
           >
             Generate
           </button>
         </form>
+        {error && <p className="text-red-500 mt-4">{error}</p>}
         {preview && (
           <div className="mt-4">
             <h2 className="text-xl font-semibold mb-2">Command Preview:</h2>
-            <pre className="bg-gray-100 p-4 rounded dark:bg-gray-800 dark:text-gray-200">
+            <pre className="bg-gray-100 p-4 rounded dark:bg-gray-800 dark:text-gray-200 overflow-x-auto">
               {preview}
             </pre>
           </div>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 }
