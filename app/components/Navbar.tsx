@@ -30,14 +30,19 @@ const navItems = [
 
 export default function Navbar() {
   const [activeLink, setActiveLink] = useState<string>("#intro");
+  const [isVisible, setIsVisible] = useState(true);
   const authContext = useAuth();
   const isVercel = process.env.NEXT_PUBLIC_IS_VERCEL === "true";
   const pathname = usePathname();
   const router = useRouter();
 
   useEffect(() => {
-    const hash = window.location.hash || "#intro"; // Default to "#intro"
+    const hash = window.location.hash || "#intro";
     setActiveLink(hash);
+
+    // Check if current path is dashboard
+    const isDashboardPath = pathname?.startsWith('/dashboard/');
+    setIsVisible(!isDashboardPath);
   }, [pathname]);
 
   const handleNavigation = (href: string) => {
@@ -61,6 +66,9 @@ export default function Navbar() {
       console.error("Logout failed:", error);
     }
   };
+
+  // If navbar should be hidden, return null
+  if (!isVisible) return null;
 
   return (
     <header className="fixed top-0 left-0 w-full z-50">
@@ -121,9 +129,7 @@ export default function Navbar() {
                           <span>Profile</span>
                         </DropdownMenuItem>
                         <DropdownMenuItem
-                          onClick={() =>
-                            handleNavigation("/dashboard/settings")
-                          }
+                          onClick={() => handleNavigation("/dashboard/settings")}
                         >
                           <Settings className="mr-2 h-4 w-4" />
                           <span>Settings</span>

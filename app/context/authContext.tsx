@@ -2,8 +2,9 @@
 import React, { createContext, useState, useEffect, ReactNode, useContext } from 'react';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
+import jwt from 'jsonwebtoken';
 
-// Define interfaces
+// Define interfaces (keeping your existing interfaces)
 export interface UserProfile {
   id: number;
   username: string;
@@ -41,52 +42,82 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+// Add a hydration safe storage wrapper
+const storage = {
+  get: (key: string): string | null => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem(key) || sessionStorage.getItem(key);
+    }
+    return null;
+  },
+  set: (key: string, value: string, remember: boolean = false) => {
+    if (typeof window !== 'undefined') {
+      if (remember) {
+        localStorage.setItem(key, value);
+      } else {
+        sessionStorage.setItem(key, value);
+      }
+    }
+  },
+  remove: (key: string) => {
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem(key);
+      sessionStorage.removeItem(key);
+    }
+  }
+};
+
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [loggedIn, setLoggedIn] = useState<boolean>(false);
   const [username, setUsername] = useState<string | null>(null);
-  const [rememberMe, setRememberMe] = useState(false);
+  const [rememberMe, setRememberMe] = useState<boolean>(false);
   const [user, setUser] = useState<UserProfile | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [isInitialized, setIsInitialized] = useState(false);
   const router = useRouter();
 
+  // Initialize auth state from cookies/storage
   useEffect(() => {
-    const checkAuthStatus = () => {
-      const authToken = Cookies.get('auth-token');
-      const storedUsername = Cookies.get('username');
-      const storedUser = Cookies.get('user');
-  
-      // Combined retrieval of username and password
-      const savedUsername = localStorage.getItem("username") || sessionStorage.getItem("username");
-      const savedPassword = localStorage.getItem("password") || sessionStorage.getItem("password");
-  
-      // If there is an auth token and a username, log the user in
-      if (authToken && (storedUsername || savedUsername)) {
-        setLoggedIn(true);
-        setUsername(storedUsername || savedUsername);
-        setRememberMe(Cookies.get('rememberMe') === 'true');
-        if (storedUser) {
-          setUser(JSON.parse(storedUser));
+    const initializeAuth = () => {
+      try {
+        const authToken = Cookies.get('auth-token');
+        const storedUsername = storage.get('username');
+        const rememberMeValue = Cookies.get('rememberMe') === 'true';
+
+        if (authToken && storedUsername) {
+          // Verify token is not expired
+          try {
+            const decodedToken = jwt.decode(authToken);
+            if (decodedToken && typeof decodedToken !== 'string' && decodedToken.exp) {
+              const currentTime = Math.floor(Date.now() / 1000);
+              if (decodedToken.exp > currentTime) {
+                setLoggedIn(true);
+                setUsername(storedUsername);
+                setRememberMe(rememberMeValue);
+                // If you have stored user data, retrieve it
+                const storedUser = storage.get('user');
+                if (storedUser) {
+                  setUser(JSON.parse(storedUser));
+                }
+              } else {
+                // Token is expired, clean up
+                logout();
+              }
+            }
+          } catch (error) {
+            console.error('Token decode error:', error);
+            logout();
+          }
         }
-        
-        // Redirect to dashboard immediately
-        router.push('/dashboard'); 
-      } else {
-        setLoggedIn(false);
-        setUsername(null);
-        setRememberMe(false);
-        setUser(null);
+      } catch (error) {
+        console.error('Auth initialization error:', error);
+      } finally {
+        setIsInitialized(true);
       }
     };
-  
-    checkAuthStatus();
-  
-    // Listen for storage events (if applicable)
-    window.addEventListener('storage', checkAuthStatus);
-  
-    return () => {
-      window.removeEventListener('storage', checkAuthStatus);
-    };
-  }, [router]);
+
+    initializeAuth();
+  }, []);
 
   const login = async (username: string, password: string, remember: boolean): Promise<AuthResponse> => {
     try {
@@ -95,25 +126,30 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password, rememberMe: remember })
       });
-  
+
       const data: AuthResponse = await response.json();
-  
+
       if (data.success && data.token && data.user) {
         setLoggedIn(true);
         setUsername(username);
         setRememberMe(remember);
         setUser(data.user);
         setError(null);
-  
-        const expires = remember ? 7 : undefined; // Remember for 7 days if true
-        Cookies.set('auth-token', data.token, { expires });
-        Cookies.set('username', username, { expires });
-        Cookies.set('rememberMe', remember.toString(), { expires });
-        Cookies.set('user', JSON.stringify(data.user), { expires });
-  
+
+        // Store in local/session storage as backup
+        storage.set('username', username, remember);
+        storage.set('user', JSON.stringify(data.user), remember);
+        
+        // Cookie is set by the API, but we'll store rememberMe preference
+        Cookies.set('rememberMe', remember.toString(), {
+          expires: remember ? 7 : 1,
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'strict'
+        });
+
         router.push('/dashboard');
       } else {
-        setError(data.message ?? 'Login failed');
+        setError(data.message || 'Login failed');  // Fixed: Use logical OR for undefined check
       }
 
       return data;
@@ -122,51 +158,62 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         success: false,
         message: 'An unexpected error occurred'
       };
-      setError(errorResponse.message ?? 'An unexpected error occurred');
+      setError(errorResponse.message || null);  // Fixed: Use logical OR for undefined check
       console.error('Login error:', error);
       return errorResponse;
     }
   };
-  
+
   const logout = () => {
+    // Clear all auth state
     setLoggedIn(false);
     setUsername(null);
     setRememberMe(false);
     setUser(null);
-    localStorage.removeItem("username");
-    localStorage.removeItem("password");
-    sessionStorage.removeItem("username");
-    sessionStorage.removeItem("password");
-    Cookies.remove('auth-token');
-    Cookies.remove('username');
+    setError(null);
+    
+    // Clear storage
+    storage.remove('username');
+    storage.remove('user');
+    
+    // Clear cookies
+    Cookies.remove('auth-token', {
+      path: '/',
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict'
+    });
     Cookies.remove('rememberMe');
-    Cookies.remove('user');
+
     router.push('/login');
   };
 
   const updateUser = async (updatedProfile: Partial<UserProfile>) => {
     try {
+      const authToken = Cookies.get('auth-token');
+      if (!authToken) {
+        throw new Error('No auth token found');
+      }
+
       const response = await fetch('/api/profile', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${Cookies.get('auth-token')}`
+          'Authorization': `Bearer ${authToken}`
         },
         body: JSON.stringify(updatedProfile)
       });
 
       const data = await response.json();
       if (data.success && user) {
-        const updatedUser: UserProfile = {
+        const updatedUser = {
           ...user,
           ...updatedProfile
         };
         setUser(updatedUser);
-        Cookies.set('user', JSON.stringify(updatedUser), { expires: rememberMe ? 7 : undefined });
+        storage.set('user', JSON.stringify(updatedUser), rememberMe);
         setError(null);
       } else {
-        const errorMessage: string = typeof data.message === 'string' ? data.message : 'Failed to update profile';
-        setError(errorMessage);
+        setError(data.message || 'Failed to update profile');  // Fixed: Use logical OR for undefined check
       }
     } catch (error: any) {
       setError('An unexpected error occurred while updating profile');
@@ -176,18 +223,23 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const updateUserSettings = async (updatedSettings: Partial<UserSettings>) => {
     try {
+      const authToken = Cookies.get('auth-token');
+      if (!authToken) {
+        throw new Error('No auth token found');
+      }
+
       const response = await fetch('/api/settings', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${Cookies.get('auth-token')}`
+          'Authorization': `Bearer ${authToken}`
         },
         body: JSON.stringify(updatedSettings)
       });
 
       const data = await response.json();
       if (data.success && user) {
-        const updatedUser: UserProfile = {
+        const updatedUser = {
           ...user,
           settings: {
             ...user.settings,
@@ -195,17 +247,20 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           }
         };
         setUser(updatedUser);
-        Cookies.set('user', JSON.stringify(updatedUser), { expires: rememberMe ? 7 : undefined });
+        storage.set('user', JSON.stringify(updatedUser), rememberMe);
         setError(null);
       } else {
-        const errorMessage: string = typeof data.message === 'string' ? data.message : 'Failed to update settings';
-        setError(errorMessage);
+        setError(data.message || 'Failed to update settings');  // Fixed: Use logical OR for undefined check
       }
     } catch (error: any) {
       setError('An unexpected error occurred while updating settings');
       console.error('Settings update error:', error);
     }
   };
+
+  if (!isInitialized) {
+    return null; // Or a loading spinner
+  }
 
   return (
     <AuthContext.Provider value={{
