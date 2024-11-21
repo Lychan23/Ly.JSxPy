@@ -1,3 +1,45 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": [
+    "next/core-web-vitals",  // Use Next.js core web vitals rules
+    "plugin:security/recommended",  // Add security plugin's recommended rules
+    "eslint:recommended"  // Enable ESLint's recommended rules
+  ],
+  "plugins": ["security"],  // Enable security plugin
+  "env": {
+    "browser": true,  // For frontend code
+    "es6": true,  // Enable modern JavaScript features
+    "node": true  // Enable Node.js environment if applicable
+  },
+  "rules": {
+    // Core Web Vitals (Next.js) settings
+    "next/no-page-custom-font": "warn",  // Warn if using custom fonts (important for performance)
+    "next/next/no-img-element": "warn",  // Warn if using <img> tags instead of <Image> component
+
+    // Security-focused rules
+    "security/detect-eval-with-expression": "error",  // Don't allow eval() with expressions
+    "security/detect-non-literal-fs-filename": "error",  // Warn about non-literal file names in fs
+    "security/detect-child-process": "error",  // Warn about spawning child processes
+    "security/detect-unsafe-regex": "error",  // Detect unsafe regular expressions
+    "security/detect-buffer-noassert": "error",  // Prevent Buffer instantiation without assertions
+
+    // General Security Practices
+    "no-eval": "error",  // Disallow the use of eval() completely
+    "no-new-func": "error",  // Disallow using new Function() (another eval-like feature)
+    "no-implied-eval": "error",  // Prevent use of methods that imply eval(), such as setTimeout with a function string
+    "no-console": ["warn", { "allow": ["warn", "error"] }],  // Limit console usage, allowing warnings and errors only
+    "no-unused-vars": "error",  // Ensure there are no unused variables
+    "no-unsafe-finally": "error",  // Disallow unsafe usage of finally block
+    "no-unsafe-negation": "error",  // Disallow unsafe negation expressions
+    "no-constant-condition": "error",  // Avoid code with constant conditions
+    "no-duplicate-imports": "error",  // Prevent importing the same module multiple times
+
+    // Encourage better practices
+    "prefer-const": "error",  // Always use const for variables that are never reassigned
+    "eqeqeq": "error",  // Encourage strict equality (===, !==)
+    "no-var": "error",  // Prefer let/const over var
+    "prefer-arrow-callback": "error",  // Use arrow functions for better readability and safety
+    "no-else-return": "error",  // Avoid unnecessary `else` after a return statement
+    "curly": "error",  // Enforce curly braces for all control statements
+    "no-magic-numbers": ["warn", { "ignore": [0, 1] }]  // Warn about magic numbers, allowing 0 and 1
+  }
 }

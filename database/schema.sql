@@ -16,16 +16,8 @@ CREATE TABLE IF NOT EXISTS `users` (
   `mfa_backup_codes` TEXT
 );
 
--- Insert a test user (hashed password for 'admin')
+-- Insert a test user (hashed password for 'admin12345')
 INSERT OR IGNORE INTO users (username, password, mfa_enabled, mfa_secret, mfa_backup_codes) 
 VALUES ('exampleUsec', '$2b$10$bo0.lTwyBgUGhDgdJhXcbe7NAtu0.ZPTJnyJrft9A5zoBOcifDUJm', 0, NULL, NULL);
 INSERT OR IGNORE INTO users (username, password, mfa_enabled, mfa_secret, mfa_backup_codes) 
-VALUES ('main', '$2b$10$sYSXq.MkBRXESb/o.l8p5eBLGhT/VL.2J4mwYZX4JljbS2ZkhOTDi', 0, NULL, NULL);
-
-CREATE TABLE IF NOT EXISTS mfa_attempts (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  user_id INTEGER NOT NULL,
-  attempt_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  success BOOLEAN NOT NULL,
-  FOREIGN KEY (user_id) REFERENCES users(id)
-);
+VALUES ('main', '$2b$10$Mb/6SHYLIWcTwl2/H6rWnOLwAumcm4iCOS0DQaqy/oDjXxc1SbzYe', 0, NULL, NULL);

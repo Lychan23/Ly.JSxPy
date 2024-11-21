@@ -35,3 +35,4 @@ ai/LyChessEngine
 cache
 *.sqlite
 todo.txt
+.env.local

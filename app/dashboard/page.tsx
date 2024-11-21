@@ -1,7 +1,9 @@
-"use client"
+"use client";
 import React, { useState, lazy, Suspense, useEffect } from 'react';
 import { useAuth } from '../context/authContext';
 import { useRouter } from 'next/navigation';
+import { useTheme } from 'next-themes';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ChevronLeft, 
   ChevronRight, 
@@ -14,156 +16,222 @@ import {
   Search,
   Settings,
   User,
+  LogOut,
   LucideIcon
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useTheme } from 'next-themes';
 
-// Define interfaces
+// Types and Interfaces
 interface Notification {
   id: number;
   title: string;
   message: string;
+  timestamp: Date;
+  read: boolean;
 }
 
 interface MenuItem {
   name: string;
   key: string;
-  icon: LucideIcon;  // Updated to use LucideIcon type
+  icon: LucideIcon;
+  requiredRole?: string[];
 }
 
+// Animation variants
+const sidebarVariants = {
+  open: {
+    width: "240px",
+    transition: {
+      type: "spring",
+      damping: 20,
+    },
+  },
+  closed: {
+    width: "80px",
+    transition: {
+      type: "spring",
+      damping: 20,
+    },
+  },
+};
+
+const contentVariants = {
+  initial: { opacity: 0, y: 20 },
+  animate: { opacity: 1, y: 0 },
+  exit: { opacity: 0, y: -20 }
+};
+
 // Lazy load components
-const ControlPanel = lazy(() => import('./control-panel/page'));
+
 const CommandBuilder = lazy(() => import('./command-builder/page'));
 const TerminalPage = lazy(() => import('./terminal/page'));
 const AIDashboard = lazy(() => import('./ai/page'));
 
-const DashboardPage = () => {
-  const authContext = useAuth();
-  const router = useRouter();
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [activeComponent, setActiveComponent] = useState('ControlPanel');
+// Component definitions
+const SearchBar = () => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [notifications, setNotifications] = useState<Notification[]>([]);
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const { theme, setTheme } = useTheme();
 
-  // Animation variants
-  const sidebarVariants = {
-    open: { width: '16rem', transition: { duration: 0.4, ease: [0.4, 0, 0.2, 1] } },
-    closed: { width: '5rem', transition: { duration: 0.4, ease: [0.4, 0, 0.2, 1] } }
-  };
-
-  const contentVariants = {
-    initial: { opacity: 0, y: 20 },
-    animate: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
-    exit: { opacity: 0, y: -20, transition: { duration: 0.3 } }
-  };
-
-  const menuItems: MenuItem[] = [
-    { name: 'Control Panel', key: 'ControlPanel', icon: LayoutDashboard },
-    { name: 'Command Builder', key: 'CommandBuilder', icon: Code },
-    { name: 'Terminal Page', key: 'TerminalPage', icon: Terminal },
-    { name: 'AI Dashboard', key: 'AIDashboard', icon: Brain },
-  ];
-
-  // Mock notifications - replace with real notifications system
-  useEffect(() => {
-    const mockNotifications: Notification[] = [
-      { id: 1, title: 'System Update', message: 'New features available' },
-      { id: 2, title: 'Security Alert', message: 'Please review recent activity' }
-    ];
-    setNotifications(mockNotifications);
-  }, []);
-
-  if (!authContext?.loggedIn) {
-    return (
-      <motion.div 
-        className="flex items-center justify-center h-screen bg-slate-50 dark:bg-slate-900"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.6 }}
-      >
-        <motion.div
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.5 }}
-          className="p-8 bg-white dark:bg-slate-800 rounded-xl shadow-lg"
-        >
-          <h2 className="text-xl font-semibold text-slate-800 dark:text-slate-100 mb-4">
-            Authentication Required
-          </h2>
-          <p className="text-slate-600 dark:text-slate-300">
-            Please log in to access the dashboard.
-          </p>
-        </motion.div>
-      </motion.div>
-    );
-  }
-
-  const LoadingSpinner = () => (
-    <div className="flex items-center justify-center h-full">
-      <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.3 }}
-        className="flex flex-col items-center gap-4"
-      >
-        <Loader2 className="w-8 h-8 animate-spin text-indigo-600 dark:text-indigo-400" />
-        <p className="text-sm text-slate-600 dark:text-slate-400">Loading content...</p>
-      </motion.div>
-    </div>
-  );
-
-  const SearchBar = () => (
-    <motion.div 
-      initial={false}
-      animate={isSearchOpen ? { width: "300px" } : { width: "40px" }}
-      transition={{ duration: 0.3 }}
-      className="relative"
-    >
-      <input
-        type="text"
-        placeholder="Search..."
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-        className={`w-full px-4 py-2 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-slate-200 
-          focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-300
-          ${isSearchOpen ? 'opacity-100' : 'opacity-0'}`}
-      />
-      <button
-        onClick={() => setIsSearchOpen(!isSearchOpen)}
-        className="absolute right-2 top-1/2 transform -translate-y-1/2"
-      >
-        <Search className="w-5 h-5 text-slate-500 dark:text-slate-400" />
-      </button>
-    </motion.div>
-  );
-
-  const NotificationPanel = () => (
-    <div className="relative group">
-      <button className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors duration-200">
-        <Bell className="w-5 h-5 text-slate-600 dark:text-slate-300" />
-        {notifications.length > 0 && (
-          <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full" />
-        )}
-      </button>
-      <div className="absolute right-0 mt-2 w-64 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
-        <div className="bg-white dark:bg-slate-800 rounded-lg shadow-lg p-4">
-          {notifications.map((notification: Notification) => (
-            <div key={notification.id} className="mb-3 last:mb-0">
-              <h4 className="text-sm font-semibold text-slate-800 dark:text-slate-200">
-                {notification.title}
-              </h4>
-              <p className="text-xs text-slate-600 dark:text-slate-400">
-                {notification.message}
-              </p>
-            </div>
-          ))}
-        </div>
+  return (
+    <div className="relative">
+      <div className="relative">
+        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-4 h-4" />
+        <input
+          type="text"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder="Search..."
+          className="pl-10 pr-4 py-2 w-64 rounded-lg border border-slate-200 dark:border-slate-700 
+            bg-slate-50 dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 
+            dark:focus:ring-indigo-400 text-sm"
+        />
       </div>
     </div>
   );
+};
+
+const NotificationPanel = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+
+  return (
+    <div className="relative">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 
+          transition-colors duration-200 relative"
+      >
+        <Bell className="w-5 h-5 text-slate-600 dark:text-slate-300" />
+        {notifications.length > 0 && (
+          <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
+        )}
+      </button>
+      
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="absolute right-0 mt-2 w-80 bg-white dark:bg-slate-800 
+              rounded-lg shadow-lg border border-slate-200 dark:border-slate-700"
+          >
+            <div className="p-4">
+              <h3 className="text-sm font-medium text-slate-900 dark:text-slate-100">
+                Notifications
+              </h3>
+              {notifications.length === 0 ? (
+                <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
+                  No new notifications
+                </p>
+              ) : (
+                <div className="mt-2 space-y-2">
+                  {notifications.map((notification) => (
+                    <div
+                      key={notification.id}
+                      className="p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700"
+                    >
+                      <h4 className="text-sm font-medium text-slate-900 dark:text-slate-100">
+                        {notification.title}
+                      </h4>
+                      <p className="text-xs text-slate-500 dark:text-slate-400">
+                        {notification.message}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
+
+const LoadingSpinner = () => (
+  <div className="flex items-center justify-center h-full">
+    <Loader2 className="w-8 h-8 animate-spin text-indigo-500" />
+  </div>
+);
+
+// Main Dashboard Component
+const DashboardPage = () => {
+  const { user, loggedIn, logout, loading } = useAuth();
+  const router = useRouter();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [activeComponent, setActiveComponent] = useState('ControlPanel');
+  const { theme, setTheme } = useTheme();
+
+  useEffect(() => {
+    if (!loading && !loggedIn) {
+      router.push('/auth');
+    }
+  }, [loading, loggedIn, router]);
+
+  // Show loading state while checking auth
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <Loader2 className="w-8 h-8 animate-spin text-indigo-500" />
+      </div>
+    );
+  }
+
+  // If not logged in, don't render the dashboard
+  if (!loggedIn || !user) {
+    return null;
+  }
+
+
+  const menuItems: MenuItem[] = [
+    { name: 'Control Panel', key: 'ControlPanel', icon: LayoutDashboard },
+    { name: 'Command Builder', key: 'CommandBuilder', icon: Code, requiredRole: ['admin', 'developer'] },
+    { name: 'Terminal Page', key: 'TerminalPage', icon: Terminal, requiredRole: ['admin'] },
+    { name: 'AI Dashboard', key: 'AIDashboard', icon: Brain },
+  ];
+
+  const UserProfile = () => (
+    <div className="relative group">
+      <button className="flex items-center space-x-2 p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700">
+        <User className="w-5 h-5 text-slate-600 dark:text-slate-300" />
+        {isSidebarOpen && (
+          <span className="text-sm text-slate-600 dark:text-slate-300">
+            {user?.username || 'User'}
+          </span>
+        )}
+      </button>
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        whileHover={{ opacity: 1, y: 0 }}
+        className="absolute bottom-full left-0 mb-2 w-48"
+      >
+        <div className="bg-white dark:bg-slate-800 rounded-lg shadow-lg p-4">
+          <div className="mb-3">
+            <h4 className="text-sm font-semibold text-slate-800 dark:text-slate-200">
+              {user?.username}
+            </h4>
+            <p className="text-xs text-slate-600 dark:text-slate-400">
+              {user?.email}
+            </p>
+          </div>
+          <button
+            onClick={logout}
+            className="w-full flex items-center space-x-2 p-2 text-red-500 hover:bg-red-50 
+              dark:hover:bg-red-900/20 rounded-lg transition-colors duration-200"
+          >
+            <LogOut size={16} />
+            <span className="text-sm">Logout</span>
+          </button>
+        </div>
+      </motion.div>
+    </div>
+  );
+
+  const hasRequiredRole = (requiredRole?: string[]): boolean => {
+    if (!requiredRole) return true;
+    return requiredRole.some(role => user?.roles?.includes(role));
+  };
+
+  const filteredMenuItems = menuItems.filter(item => hasRequiredRole(item.requiredRole));
 
   return (
     <div className="flex h-screen bg-slate-50 dark:bg-slate-900 overflow-hidden">
@@ -173,39 +241,31 @@ const DashboardPage = () => {
         animate={isSidebarOpen ? 'open' : 'closed'}
         className="bg-white dark:bg-slate-800 shadow-lg relative"
       >
-        <div className="sticky top-0 bg-white dark:bg-slate-800 z-10 border-b border-slate-200 dark:border-slate-700">
-          <div className="flex justify-between items-center p-4">
-            <AnimatePresence mode="wait">
-              {isSidebarOpen && (
-                <motion.h2
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
-                  transition={{ duration: 0.3 }}
-                  className="text-xl font-semibold text-slate-800 dark:text-slate-100"
-                >
-                  Dashboard
-                </motion.h2>
-              )}
-            </AnimatePresence>
-            <button
-              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-              className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors duration-200"
-              aria-label={isSidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
-            >
-              <motion.div animate={{ rotate: isSidebarOpen ? 0 : 180 }}>
-                {isSidebarOpen ? <ChevronLeft /> : <ChevronRight />}
-              </motion.div>
-            </button>
-          </div>
+        <button
+          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+          className="absolute -right-3 top-6 bg-white dark:bg-slate-800 rounded-full p-1 
+            shadow-md border border-slate-200 dark:border-slate-700"
+        >
+          {isSidebarOpen ? (
+            <ChevronLeft className="w-4 h-4 text-slate-600 dark:text-slate-300" />
+          ) : (
+            <ChevronRight className="w-4 h-4 text-slate-600 dark:text-slate-300" />
+          )}
+        </button>
+
+        <div className="p-4">
+          <h1 className={`font-bold text-slate-800 dark:text-slate-200 
+            ${isSidebarOpen ? 'text-xl' : 'text-center text-2xl'}`}>
+            {isSidebarOpen ? 'Dashboard' : 'D'}
+          </h1>
         </div>
 
         <nav className="mt-6 px-2">
-          {menuItems.map((item) => (
+          {filteredMenuItems.map((item) => (
             <motion.button
               key={item.key}
               onClick={() => setActiveComponent(item.key)}
-              whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
+              whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               className={`w-full flex items-center py-3 px-4 rounded-lg mb-2 transition-all duration-200
                 ${activeComponent === item.key
@@ -220,7 +280,7 @@ const DashboardPage = () => {
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -10 }}
-                    transition={{ duration: 0.3 }}
+                    className="text-sm"
                   >
                     {item.name}
                   </motion.span>
@@ -231,9 +291,10 @@ const DashboardPage = () => {
         </nav>
 
         <div className="absolute bottom-0 w-full p-4 border-t border-slate-200 dark:border-slate-700">
+          <UserProfile />
           <button
             onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-            className="w-full p-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 
+            className="w-full mt-2 p-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 
               hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors duration-200"
           >
             {theme === 'dark' ? '🌞 Light' : '🌙 Dark'}
@@ -253,17 +314,11 @@ const DashboardPage = () => {
               >
                 <Settings className="w-5 h-5 text-slate-600 dark:text-slate-300" />
               </button>
-              <button 
-                onClick={() => router.push('/dashboard/profile')}
-                className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors duration-200"
-              >
-                <User className="w-5 h-5 text-slate-600 dark:text-slate-300" />
-              </button>
             </div>
           </div>
         </header>
 
-        <motion.main
+        <motion.main 
           className="flex-1 p-6 overflow-auto"
           variants={contentVariants}
           initial="initial"
@@ -273,13 +328,11 @@ const DashboardPage = () => {
           <Suspense fallback={<LoadingSpinner />}>
             <motion.div
               key={activeComponent}
-              variants={contentVariants}
-              initial="initial"
-              animate="animate"
-              exit="exit"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
               className="h-full"
-            >
-              {activeComponent === 'ControlPanel' && <ControlPanel />}
+            >              
               {activeComponent === 'CommandBuilder' && <CommandBuilder />}
               {activeComponent === 'TerminalPage' && <TerminalPage />}
               {activeComponent === 'AIDashboard' && <AIDashboard />}

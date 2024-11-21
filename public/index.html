@@ -1,397 +1,89 @@
-
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bot Control Panel</title>
-    <style id="theme-style">
-        /* Dark Theme (default) */
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #0d1117;
-            color: #c9d1d9;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            height: 100vh;
-        }
-        h1 {
-            color: #58a6ff;
-        }
-        button {
-            background-color: #21262d;
-            color: #c9d1d9;
-            border: none;
-            padding: 12px 24px;
-            margin: 10px;
-            cursor: pointer;
-            font-size: 16px;
-            border-radius: 5px;
-            transition: background-color 0.3s ease, box-shadow 0.3s ease;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-        }
-        button:hover {
-            background-color: #30363d;
-            box-shadow: 0 0 20px #58a6ff, 0 0 40px #58a6ff, 0 0 60px #58a6ff;
-        }
-        #log, #stats, #input-section {
-            width: 60%;
-            max-width: 800px;
-            margin-top: 20px;
-            background-color: #161b22;
-            border: 1px solid #21262d;
-            border-radius: 8px;
-            padding: 20px;
-        }
-        #log {
-            height: 200px;
-            overflow-y: scroll;
-            white-space: pre-wrap;
-            margin-bottom: 20px;
-        }
-        #stats {
-            display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-        }
-        .stat-box {
-            text-align: center;
-            flex: 1 1 200px;
-            padding: 10px;
-            margin: 10px;
-            background-color: #21262d;
-            border-radius: 5px;
-            border: 1px solid #21262d;
-        }
-        .stat-box h3 {
-            margin: 5px 0;
-            color: #58a6ff;
-        }
-        .stat-box p {
-            margin: 5px 0;
-            font-size: 18px;
-        }
-        #input-section {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-top: 20px;
-        }
-        #input-section input {
-            padding: 12px;
-            font-size: 16px;
-            margin-right: 10px;
-            border: 1px solid #21262d;
-            background-color: #161b22;
-            color: #c9d1d9;
-            border-radius: 5px;
-            flex: 1;
-            max-width: 300px;
-        }
-        #input-section button {
-            flex: 0 0 auto;
-            padding: 12px 24px;
-        }
-        #project-list {
-            width: 20%;
-            min-width: 200px;
-            padding: 20px;
-            background-color: #161b22;
-            border: 1px solid #21262d;
-            border-radius: 8px;
-            text-align: left;
-            position: fixed;
-            left: 0;
-            top: 0;
-            height: 100%;
-            overflow-y: auto;
-        }
-        #project-list h2 {
-            color: #58a6ff;
-            margin-bottom: 10px;
-        }
-        #project-list ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        #project-list li {
-            margin-bottom: 8px;
-            cursor: pointer;
-            color: #c9d1d9;
-            transition: color 0.3s ease;
-        }
-        #project-list li:hover {
-            color: #58a6ff;
-        }
-        /* New sections */
-        #right-sidebar {
-            width: 20%;
-            min-width: 200px;
-            padding: 20px;
-            background-color: #161b22;
-            border: 1px solid #21262d;
-            border-radius: 8px;
-            text-align: left;
-            position: fixed;
-            right: 0;
-            top: 0;
-            height: 100%;
-            overflow-y: auto;
-        }
-        #activity-feed, #bot-status, #user-list {
-            margin-top: 20px;
-            margin-bottom: 20px;
-        }
-        #activity-feed h3, #bot-status h3, #user-list h3 {
-            color: #58a6ff;
-            margin-bottom: 10px;
-        }
-        #activityLog {
-            padding: 10px;
-        }
-        #activityLog div {
-            margin-bottom: 10px;
-        }
-        #user-list ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        #user-list li {
-            margin-bottom: 8px;
-            color: #c9d1d9;
-        }
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Welcome to Firebase Hosting</title>
+
+    <!-- update the version number as needed -->
+    <script defer src="/__/firebase/11.0.1/firebase-app-compat.js"></script>
+    <!-- include only the Firebase features as you need -->
+    <script defer src="/__/firebase/11.0.1/firebase-auth-compat.js"></script>
+    <script defer src="/__/firebase/11.0.1/firebase-database-compat.js"></script>
+    <script defer src="/__/firebase/11.0.1/firebase-firestore-compat.js"></script>
+    <script defer src="/__/firebase/11.0.1/firebase-functions-compat.js"></script>
+    <script defer src="/__/firebase/11.0.1/firebase-messaging-compat.js"></script>
+    <script defer src="/__/firebase/11.0.1/firebase-storage-compat.js"></script>
+    <script defer src="/__/firebase/11.0.1/firebase-analytics-compat.js"></script>
+    <script defer src="/__/firebase/11.0.1/firebase-remote-config-compat.js"></script>
+    <script defer src="/__/firebase/11.0.1/firebase-performance-compat.js"></script>
+    <!-- 
+      initialize the SDK after all desired features are loaded, set useEmulator to false
+      to avoid connecting the SDK to running emulators.
+    -->
+    <script defer src="/__/firebase/init.js?useEmulator=true"></script>
+
+    <style media="screen">
+      body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; }
+      #message { background: white; max-width: 360px; margin: 100px auto 16px; padding: 32px 24px; border-radius: 3px; }
+      #message h2 { color: #ffa100; font-weight: bold; font-size: 16px; margin: 0 0 8px; }
+      #message h1 { font-size: 22px; font-weight: 300; color: rgba(0,0,0,0.6); margin: 0 0 16px;}
+      #message p { line-height: 140%; margin: 16px 0 24px; font-size: 14px; }
+      #message a { display: block; text-align: center; background: #039be5; text-transform: uppercase; text-decoration: none; color: white; padding: 16px; border-radius: 4px; }
+      #message, #message a { box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); }
+      #load { color: rgba(0,0,0,0.4); text-align: center; font-size: 13px; }
+      @media (max-width: 600px) {
+        body, #message { margin-top: 0; background: white; box-shadow: none; }
+        body { border-top: 16px solid #ffa100; }
+      }
     </style>
-    <style id="light-theme-style">
-        /* Light Theme */
-        body.light {
-            background-color: #f4f4f4;
-            color: #000;
-        }
-        body.light h1 {
-            color: #007acc;
-        }
-        body.light button {
-            background-color: #e1e4e8;
-            color: #000;
-        }
-        body.light button:hover {
-            background-color: #d1d5da;
-            box-shadow: 0 0 20px #007acc, 0 0 40px #007acc, 0 0 60px #007acc;
-        }
-        body.light #log, body.light #stats, body.light #input-section, body.light #activity-feed, body.light #bot-status, body.light #user-list, body.light #right-sidebar {
-            background-color: #fff;
-            border: 1px solid #d1d5da;
-        }
-        body.light .stat-box {
-            background-color: #e1e4e8;
-            border: 1px solid #d1d5da;
-        }
-        body.light .stat-box h3 {
-            color: #007acc;
-        }
-        body.light #project-list {
-            background-color: #fff;
-            border: 1px solid #d1d5da;
-        }
-        body.light #project-list h2 {
-            color: #007acc;
-        }
-        body.light #project-list li {
-            color: #000;
-        }
-        body.light #project-list li:hover {
-            color: #007acc;
-        }
-        body.light #right-sidebar h3 {
-            color: #007acc;
-        }
-        body.light #activityLog {
-            padding: 10px;
-        }
-        body.light #activityLog div {
-            margin-bottom: 10px;
-        }
-    </style>
-</head>
-<body>
-    <div id="project-list">
-        <h2>Projects</h2>
-        <ul id="projectList"></ul>
+  </head>
+  <body>
+    <div id="message">
+      <h2>Welcome</h2>
+      <h1>Firebase Hosting Setup Complete</h1>
+      <p>You're seeing this because you've successfully setup Firebase Hosting. Now it's time to go build something extraordinary!</p>
+      <a target="_blank" href="https://firebase.google.com/docs/hosting/">Open Hosting Documentation</a>
     </div>
-    <div style="flex: 1; display: flex; flex-direction: column; align-items: center;">
-        <h1>Bot Control Panel</h1>
-        <div>
-            <button id="startBtn">Start Bot</button>
-            <button id="stopBtn">Stop Bot</button>
-            <button id="startServerBtn">Start Server</button>
-        </div>
-        <div id="log"></div>
-        <div id="stats">
-            <div class="stat-box">
-                <h3>CPU Load</h3>
-                <p id="cpu">0%</p>
-            </div>
-            <div class="stat-box">
-                <h3>Memory Usage</h3>
-                <p id="memory">0%</p>
-            </div>
-            <div class="stat-box">
-                <h3>Network Inbound</h3>
-                <p id="network-inbound">N/A</p>
-            </div>
-            <div class="stat-box">
-                <h3>Network Outbound</h3>
-                <p id="network-outbound">N/A</p>
-            </div>
-        </div>
-        <div id="input-section">
-            <input type="text" id="discordMessage" placeholder="Enter text to send to Discord">
-            <button id="sendBtn">Send</button>
-            <button id="themeToggleBtn">Toggle Theme</button>
-        </div>
-    </div>
-    <div id="right-sidebar">
-        <div id="activity-feed">
-            <h3>Activity Feed</h3>
-            <div id="activityLog"></div>
-        </div>
-        <div id="bot-status">
-            <h3>Bot Status</h3>
-            <p id="uptime">Uptime: N/A</p>
-            <p id="current-tasks">Current Tasks: N/A</p>
-        </div>
-        <div id="user-list">
-            <h3>Active Users</h3>
-            <ul id="userList"></ul>
-        </div>
-    </div>
-    <script src="/socket.io/socket.io.js"></script>
+    <p id="load">Firebase SDK Loading&hellip;</p>
+
     <script>
-        const socket = io();
+      document.addEventListener('DOMContentLoaded', function() {
+        const loadEl = document.querySelector('#load');
+        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+        // // The Firebase SDK is initialized and available here!
+        //
+        // firebase.auth().onAuthStateChanged(user => { });
+        // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
+        // firebase.firestore().doc('/foo/bar').get().then(() => { });
+        // firebase.functions().httpsCallable('yourFunction')().then(() => { });
+        // firebase.messaging().requestPermission().then(() => { });
+        // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
+        // firebase.analytics(); // call to activate
+        // firebase.analytics().logEvent('tutorial_completed');
+        // firebase.performance(); // call to activate
+        //
+        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
 
-        document.getElementById('startBtn').addEventListener('click', () => {
-            fetch('/start', { method: 'POST' })
-                .then(response => response.text())
-                .then(data => console.log(data));
-        });
-
-        document.getElementById('stopBtn').addEventListener('click', () => {
-            fetch('/stop', { method: 'POST' })
-                .then(response => response.text())
-                .then(data => console.log(data));
-        });
-
-        document.getElementById('startServerBtn').addEventListener('click', () => {
-            fetch('/api/start-server', { method: 'POST' })
-                .then(response => response.text())
-                .then(data => console.log(data))
-                .catch(error => console.error('Error:', error));
-            });
-
-
-        document.getElementById('sendBtn').addEventListener('click', () => {
-            const message = document.getElementById('discordMessage').value;
-            fetch('/send', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ text: message }),
-            })
-            .then(response => response.text())
-            .then(data => console.log(data));
-        });
-
-        document.getElementById('themeToggleBtn').addEventListener('click', () => {
-            document.body.classList.toggle('light');
-            const isLight = document.body.classList.contains('light');
-            fetch('/save-theme', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ theme: isLight ? 'light' : 'dark' }),
-            });
-        });
-
-        function loadTheme() {
-            fetch('/load-theme')
-                .then(response => response.json())
-                .then(data => {
-                    if (data.theme === 'light') {
-                        document.body.classList.add('light');
-                    }
-                });
+        try {
+          let app = firebase.app();
+          let features = [
+            'auth', 
+            'database', 
+            'firestore',
+            'functions',
+            'messaging', 
+            'storage', 
+            'analytics', 
+            'remoteConfig',
+            'performance',
+          ].filter(feature => typeof app[feature] === 'function');
+          loadEl.textContent = `Firebase SDK loaded with ${features.join(', ')}`;
+        } catch (e) {
+          console.error(e);
+          loadEl.textContent = 'Error loading the Firebase SDK, check the console.';
         }
-
-        socket.on('log', (data) => {
-            const logDiv = document.getElementById('log');
-            logDiv.textContent += data + '\n';
-            logDiv.scrollTop = logDiv.scrollHeight;
-
-            const activityLogDiv = document.getElementById('activityLog');
-            const logEntry = document.createElement('div');
-            logEntry.textContent = data;
-            activityLogDiv.appendChild(logEntry);
-            activityLogDiv.scrollTop = activityLogDiv.scrollHeight;
-        });
-
-        socket.on('stats', (data) => {
-            document.getElementById('cpu').textContent = `${data.cpu}%`;
-            document.getElementById('memory').textContent = `${data.memory}%`;
-            document.getElementById('network-inbound').textContent = data.networkInbound;
-            document.getElementById('network-outbound').textContent = data.networkOutbound;
-            document.getElementById('uptime').textContent = `Uptime: ${data.uptime}`;
-            document.getElementById('current-tasks').textContent = `Current Tasks: ${data.currentTasks}`;
-        });
-
-        socket.on('activity', (data) => {
-            const activityLogDiv = document.getElementById('activityLog');
-            const logEntry = document.createElement('div');
-            logEntry.textContent = data;
-            activityLogDiv.appendChild(logEntry);
-            activityLogDiv.scrollTop = activityLogDiv.scrollHeight;
-        });
-
-        socket.on('userList', (users) => {
-            const userListDiv = document.getElementById('userList');
-            userListDiv.innerHTML = '';
-            users.forEach(user => {
-                const li = document.createElement('li');
-                li.textContent = user;
-                userListDiv.appendChild(li);
-            });
-        });
-
-        fetch('/projects')
-            .then(response => response.json())
-            .then(projects => {
-                const projectList = document.getElementById('projectList');
-                projects.forEach(project => {
-                    const li = document.createElement('li');
-                    li.textContent = project;
-                    li.addEventListener('click', () => startProject(project));
-                    projectList.appendChild(li);
-                });
-            })
-            .catch(error => console.error('Error fetching projects:', error));
-
-        function startProject(projectName) {
-            fetch('/start', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ project: projectName }),
-            })
-            .then(response => response.text())
-            .then(data => console.log(data))
-            .catch(error => console.error('Error starting project:', error));
-        }
-
-        loadTheme();
+      });
     </script>
-</body>
+  </body>
 </html>
-

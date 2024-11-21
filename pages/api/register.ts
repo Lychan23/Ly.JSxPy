@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import bcrypt from 'bcrypt';
-import initializeDb from '@/database/db';
+import { db } from '@/firebase/firebaseConfig'; // Import Firestore database
+import { doc, getDoc, setDoc, collection } from 'firebase/firestore';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
@@ -14,20 +15,23 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    const db = await initializeDb();
-    
-    // Check if user already exists
-    const existingUser = await db.get('SELECT * FROM users WHERE username = ?', username);
+    // Define a reference to the user document in Firestore
+    const userRef = doc(collection(db, 'users'), username);
+    const userSnapshot = await getDoc(userRef);
 
-    if (existingUser) {
+    if (userSnapshot.exists()) {
       return res.status(409).json({ message: 'User already exists' });
     }
 
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Insert the new user
-    await db.run('INSERT INTO users (username, password) VALUES (?, ?)', username, hashedPassword);
+    // Save the new user to Firestore
+    await setDoc(userRef, {
+      username,
+      password: hashedPassword,
+      createdAt: new Date().toISOString(),
+    });
 
     return res.status(201).json({ message: 'User registered successfully' });
   } catch (error) {

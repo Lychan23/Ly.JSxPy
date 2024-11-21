@@ -1,0 +1,71 @@
+import { initializeApp, getApps, getApp, FirebaseApp } from 'firebase/app';
+import { Auth, getAuth } from 'firebase/auth';
+import { Firestore, getFirestore } from 'firebase/firestore';
+import { FirebaseStorage, getStorage } from 'firebase/storage';
+
+interface FirebaseConfig {
+  apiKey: string;
+  authDomain: string;
+  projectId: string;
+  storageBucket: string;
+  messagingSenderId: string;
+  appId: string;
+  measurementId?: string;
+}
+
+// import the config from console firebase webapp 
+const firebaseConfig = {
+  apiKey: process.env.MY_NEW_FIREBASE_KEY!,
+  authDomain: process.env.MY_NEW_FIREBASE_AUTH_DOMAIN!,
+  projectId: process.env.MY_NEW_FIREBASE_PROJECT_ID!,
+  storageBucket: process.env.MY_NEW_FIREBASE_STORAGE_BUCKET!,
+  messagingSenderId: process.env.MY_NEW_FIREBASE_MESSAGING_SENDER_ID!,
+  appId: process.env.MY_NEW_FIREBASE_APP_ID!,
+  measurementId: process.env.MY_NEW_FIREBASE_MEASUREMENT_ID,
+};
+//you can add this to gitignore if you choose to hardcode it. or you can use .env
+
+
+function initializeFirebase(): FirebaseApp {
+  try {
+    return getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+  } catch (error) {
+    console.error('Error initializing Firebase:', error);
+    throw error;
+  }
+}
+
+// Initialize app
+let app: FirebaseApp;
+let auth: Auth;
+let db: Firestore;
+let storage: FirebaseStorage;
+
+try {
+  app = initializeFirebase();
+  auth = getAuth(app);
+  db = getFirestore(app);
+  storage = getStorage(app);
+
+  // Add auth state logging only in client side
+  if (typeof window !== 'undefined') {
+    auth.onAuthStateChanged(
+      (user) => {
+        if (user) {
+          console.log('User is signed in');
+        } else {
+          console.log('No user is signed in');
+        }
+      },
+      (error) => {
+        console.error('Auth state change error:', error);
+      }
+    );
+  }
+} catch (error) {
+  console.error('Error initializing Firebase services:', error);
+  throw error;
+}
+
+export { auth, db, storage };
+export type { Auth, Firestore, FirebaseStorage };
