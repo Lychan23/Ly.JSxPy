@@ -27,6 +27,11 @@ import {
   Firestore 
 } from "@/firebase/firebaseConfig";
 
+export interface AIProviderSettings {
+  apiKey?: string;
+  selectedModel?: string;
+  enabled?: boolean;
+}
 // Enhanced Type Definitions
 interface UserSettings {
   darkMode: boolean;
@@ -35,12 +40,24 @@ interface UserSettings {
   rememberMe?: boolean;
   lastLoginAt?: Date;
   lastActiveAt?: Date;
+  twoFactorAuth?: boolean;
+  totpSecret?: string;
+  aiProviders?: {
+    free?: AIProviderSettings;
+    openai?: AIProviderSettings;
+    anthropic?: AIProviderSettings;
+    // Extensible for future providers
+    [key: string]: AIProviderSettings | undefined;
+  };
 }
 
 interface UserProfile {
   id: string;
   username: string;
   email: string;
+  phone?: string;
+  location?: string;
+  avatarUrl?: string;
   roles: string[];
   settings: UserSettings;
   createdAt?: Date;
@@ -60,7 +77,7 @@ interface AuthState {
   loading: boolean;
   initialized: boolean;
   error: string | null;
-  firebaseUser: FirebaseUser | null; // Added to store Firebase user
+  firebaseUser: FirebaseUser | null;
 }
 
 interface AuthContextProps extends AuthState {
@@ -70,7 +87,13 @@ interface AuthContextProps extends AuthState {
   refreshUserProfile: () => Promise<void>;
   updateUserSettings: (settings: Partial<UserSettings>) => Promise<void>;
   resetError: () => void;
-  getIdToken: () => Promise<string>; // Added getIdToken method
+  getIdToken: () => Promise<string>;
+  
+  // New method for AI provider settings
+  updateAIProviderSettings: (
+    provider: string, 
+    settings: Partial<AIProviderSettings>
+  ) => Promise<void>;
 }
 
 interface AuthProviderProps {
@@ -90,7 +113,6 @@ export const useAuth = () => {
   }
   return context;
 };
-
 // Helper Functions
 const getDeviceInfo = () => {
   const userAgent = window.navigator.userAgent;
@@ -180,6 +202,42 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
     return state.firebaseUser.getIdToken(true);
   };
 
+  const updateAIProviderSettings = async (
+    provider: string, 
+    settings: Partial<AIProviderSettings>
+  ): Promise<void> => {
+    if (!state.user?.id || !providedDb) return;
+
+    try {
+      const userRef = doc(providedDb, "users", state.user.id);
+      
+      // Merge new AI provider settings with existing settings
+      const currentAIProviders = state.user.settings.aiProviders || {};
+      const updatedAIProviders = {
+        ...currentAIProviders,
+        [provider]: {
+          ...(currentAIProviders[provider] || {}),
+          ...settings
+        }
+      };
+
+      await updateDoc(userRef, {
+        settings: { 
+          ...state.user.settings,
+          aiProviders: updatedAIProviders
+        },
+        updatedAt: serverTimestamp()
+      });
+      
+      await refreshUserProfile();
+    } catch (error) {
+      console.error(`Error updating ${provider} AI settings:`, error);
+      updateState({ 
+        error: `Failed to update ${provider} AI settings` 
+      });
+    }
+  };
+
   // Enhanced profile loading with activity tracking
   const loadUserProfile = async (uid: string): Promise<boolean> => {
     if (!providedDb) {
@@ -197,13 +255,33 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
         const userData = userDoc.data() as Omit<UserProfile, 'id'>;
         const deviceInfo = getDeviceInfo();
         
+        // Ensure aiProviders exists with default settings if not present
+        const updatedUserData = {
+          ...userData,
+          settings: {
+            ...userData.settings,
+            aiProviders: userData.settings.aiProviders || {
+              free: { 
+                enabled: true,
+                selectedModel: 'llama-3.1-70b-versatile' 
+              },
+              openai: { 
+                enabled: false,
+                apiKey: '',
+                selectedModel: 'gpt-3.5-turbo'
+              }
+            }
+          }
+        };
+
         await updateDoc(userRef, {
           lastActiveAt: serverTimestamp(),
           deviceInfo,
-          updatedAt: serverTimestamp()
+          updatedAt: serverTimestamp(),
+          settings: updatedUserData.settings
         });
   
-        const userProfile = { ...userData, id: uid };
+        const userProfile = { ...updatedUserData, id: uid };
         updateState({ 
           user: userProfile, 
           loggedIn: true,
@@ -225,7 +303,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
       return false;
     }
   };
-
+  
   // Refresh user profile
   const refreshUserProfile = async () => {
     if (state.user?.id) {
@@ -474,7 +552,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
     refreshUserProfile,
     updateUserSettings,
     resetError,
-    getIdToken // Added to context value
+    getIdToken,
+    updateAIProviderSettings
   };
 
   return (

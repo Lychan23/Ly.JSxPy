@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, lazy, Suspense, useEffect } from 'react';
 import { useAuth } from '../context/authContext';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useTheme } from 'next-themes';
 import { motion, AnimatePresence } from 'framer-motion';

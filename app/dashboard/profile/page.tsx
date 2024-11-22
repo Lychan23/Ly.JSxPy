@@ -1,41 +1,35 @@
-"use client";
+"use client"
 import React, { useState, ChangeEvent, FormEvent, useEffect } from 'react';
-import { useAuth } from '../../context/authContext';
+import { useAuth } from '@/app/context/authContext';
 import { Card, CardHeader, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { User, Mail, Phone, MapPin } from 'lucide-react';
+import { doc, updateDoc, serverTimestamp } from 'firebase/firestore';
+import { db } from '@/firebase/firebaseConfig';
 
-const ProfilePage: React.FC = () => {
-  const { user } = useAuth(); // Get the logged-in user from context
+const ProfilePage = () => {
+  const { user, refreshUserProfile } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
     location: '',
-    avatarUrl: '', // Added for profile picture
+    avatarUrl: '',
   });
 
-  // Load user profile from the server on component mount
   useEffect(() => {
-    const fetchUserProfile = async () => {
-      if (user) {
-        try {
-          const response = await fetch(`/api/getProfile?username=${user.username}`);
-          const data = await response.json();
-          if (data.success) {
-            setFormData(data.profile);
-          } else {
-            console.error('Failed to load profile:', data.message);
-          }
-        } catch (error) {
-          console.error('Error fetching user profile:', error);
-        }
-      }
-    };
-    fetchUserProfile();
+    if (user) {
+      setFormData({
+        name: user.username || '',
+        email: user.email || '',
+        phone: user.phone || '',
+        location: user.location || '',
+        avatarUrl: user.avatarUrl || '',
+      });
+    }
   }, [user]);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -45,21 +39,20 @@ const ProfilePage: React.FC = () => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (user) { // Check if user is not null before proceeding
+    if (user?.id) {
       try {
-        const response = await fetch(`/api/updateProfile?username=${user.username}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(formData),
+        const userRef = doc(db, 'users', user.id);
+        await updateDoc(userRef, {
+          username: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          location: formData.location,
+          avatarUrl: formData.avatarUrl,
+          updatedAt: serverTimestamp(),
         });
-        const data = await response.json();
-        if (data.success) {
-          setIsEditing(false); // Exit edit mode after successful update
-        } else {
-          console.error('Failed to update profile:', data.message);
-        }
+        
+        await refreshUserProfile();
+        setIsEditing(false);
       } catch (error) {
         console.error('Failed to update profile:', error);
       }
@@ -78,7 +71,7 @@ const ProfilePage: React.FC = () => {
               <AvatarImage src={formData.avatarUrl} alt={formData.name} />
               <AvatarFallback>{formData.name?.charAt(0) || 'U'}</AvatarFallback>
             </Avatar>
-            {!isEditing && user && ( // Check if user is logged in before showing the button
+            {!isEditing && user && (
               <Button variant="outline" onClick={() => setIsEditing(true)}>
                 Edit Profile
               </Button>

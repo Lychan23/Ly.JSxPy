@@ -36,3 +36,4 @@ cache
 *.sqlite
 todo.txt
 .env.local
+__pycache__
